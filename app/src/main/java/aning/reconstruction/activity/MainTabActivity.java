@@ -20,11 +20,10 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 
-import aning.reconstruction.DEMO.DemoTabFragment;
 import aning.reconstruction.R;
+import aning.reconstruction.fragment.CameraFragment;
+import aning.reconstruction.fragment.OutputFragment;
 import aning.reconstruction.fragment.SettingFragment;
-import aning.reconstruction.fragment.UserListFragment;
-import aning.reconstruction.fragment.UserRecyclerFragment;
 import zuo.biao.library.base.BaseBottomTabActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 
@@ -67,13 +66,10 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	// UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-	private DemoTabFragment demoTabFragment;
 	@Override
 	public void initView() {// 必须调用
 		super.initView();
 		exitAnim = R.anim.bottom_push_out;
-
-		demoTabFragment = DemoTabFragment.createInstance("杭州");
 	}
 
 
@@ -100,29 +96,23 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 		switch (position) {
 		case 1:
 			showShortToast("结果");
-			return SettingFragment.createInstance();
+			return OutputFragment.createInstance(0);
 		case 2:
 			showShortToast("设置");
-//			return SettingFragment.createInstance();
-			return demoTabFragment;
-		default:
 			return SettingFragment.createInstance();
-//			return UserListFragment.createInstance(UserListFragment.RANGE_ALL);
+		default:
+			return CameraFragment.createInstance(0);
 		}
 	};
 
-	private static final String[] TAB_NAMES = {"主页", "结果", "设置"};
+	private static final String[] TAB_NAMES = {"相机", "结果", "设置"};
 	@Override
 	protected void selectTab(int position) {
 		//导致切换时闪屏，建议去掉BottomTabActivity中的topbar，在fragment中显示topbar
 		//		rlBottomTabTopbar.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
-
+		showShortToast(position);
 		tvBaseTitle.setText(TAB_NAMES[position]);
 
-		//点击底部tab切换顶部tab，非必要
-		if (position == 2 && position == currentPosition && demoTabFragment != null) {
-			demoTabFragment.selectNext();
-		}
 	}
 
 
@@ -174,15 +164,10 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 		//将Activity的onDragBottom事件传递到Fragment，非必要<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		switch (currentPosition) {
 		case 2:
-			if (demoTabFragment != null) {
-				if (rightToLeft) {
-					demoTabFragment.selectMan();
-				} else {
-					demoTabFragment.selectPlace();
-				}
-			}
+			showShortToast("2");
 			break;
 		default:
+			showShortToast("default");
 			break;
 		}
 		//将Activity的onDragBottom事件传递到Fragment，非必要>>>>>>>>>>>>>>>>>>>>>>>>>>>

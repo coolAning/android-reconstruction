@@ -14,7 +14,7 @@ limitations under the License.*/
 
 package aning.reconstruction.manager;
 
-import aning.reconstruction.application.DemoApplication;
+import aning.reconstruction.application.Application;
 import aning.reconstruction.model.User;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.Log;
@@ -38,7 +38,7 @@ public class DataManager {
 		if (instance == null) {
 			synchronized (DataManager.class) {
 				if (instance == null) {
-					instance = new DataManager(DemoApplication.getInstance());
+					instance = new DataManager(Application.getInstance());
 				}
 			}
 		}

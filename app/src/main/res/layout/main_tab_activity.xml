@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/tvBottomTabTab0"
                 style="@style/bottom_tab_tv"
-                android:text="主页" />
+                android:text="相机" />
         </LinearLayout>
 
         <LinearLayout

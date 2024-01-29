@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import aning.reconstruction.application.DemoApplication;
+import aning.reconstruction.application.Application;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.model.Parameter;
@@ -122,7 +122,7 @@ public class HttpRequest {
 	 */
 	public static void getUser(long userId, final int requestCode, final OnHttpResponseListener listener) {
 		Map<String, Object> request = new HashMap<>();
-		request.put(CURRENT_USER_ID, DemoApplication.getInstance().getCurrentUserId());
+		request.put(CURRENT_USER_ID, Application.getInstance().getCurrentUserId());
 		request.put(USER_ID, userId);
 
 		HttpManager.getInstance().get(request, URL_BASE + "/user", requestCode, listener);
@@ -138,7 +138,7 @@ public class HttpRequest {
 	 */
 	public static void getUserList(int range, int pageNum, final int requestCode, final OnHttpResponseListener listener) {
 		Map<String, Object> request = new HashMap<>();
-		request.put(CURRENT_USER_ID, DemoApplication.getInstance().getCurrentUserId());
+		request.put(CURRENT_USER_ID, Application.getInstance().getCurrentUserId());
 		request.put(RANGE, range);
 		request.put(PAGE_NUM, pageNum);
 
