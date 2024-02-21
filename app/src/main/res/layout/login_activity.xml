@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/activity_page"
+    >
+
+    <RelativeLayout style="@style/topbar_bg">
+
+        <ImageButton style="@style/topbar_return_img"
+            android:contentDescription="退出"
+            />
+
+        <TextView
+            style="@style/topbar_title"
+            android:layout_centerHorizontal="true"
+            android:text="登录" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/activity_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_1"
+        >
+
+        <TextView
+            style="@style/topbar_title"
+            android:layout_width="175dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:text="三维重建系统"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="用户名"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+
+                />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:minHeight="48dp" />
+
+
+            <Button
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:text="登录" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvDemo"
+        style="@style/text_big_black"
+        android:text="Test"
+        />
+
+</LinearLayout>

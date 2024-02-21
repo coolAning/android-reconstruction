@@ -59,7 +59,7 @@
         </provider>
 
         <activity
-            android:name="aning.reconstruction.activity.MainTabActivity"
+            android:name="aning.reconstruction.activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -68,6 +68,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="aning.reconstruction.activity.MainTabActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="aning.reconstruction.activity.SettingActivity"
             android:screenOrientation="portrait"

@@ -32,8 +32,8 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
  * @use MainTabActivity.createIntent(...)
  */
 public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDragListener {
-	//	private static final String TAG = "MainTabActivity";
-
+	private static final String TAG = "MainTabActivity";
+	public static final String INTENT_USER_ID = "INTENT_USER_ID";
 
 	//启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -41,19 +41,21 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	 * @param context
 	 * @return
 	 */
-	public static Intent createIntent(Context context) {
-		return new Intent(context, MainTabActivity.class);
+	public static Intent createIntent(Context context, long userId) {
+		return new Intent(context, MainTabActivity.class).putExtra(INTENT_USER_ID, userId);
 	}
 
 
 	//启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+	private long userId = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_tab_activity, this);
 
+		intent = getIntent();
+		userId = intent.getLongExtra(INTENT_USER_ID, userId);
 		//功能归类分区方法，必须调用<<<<<<<<<<
 		initView();
 		initData();
