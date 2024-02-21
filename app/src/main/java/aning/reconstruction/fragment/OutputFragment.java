@@ -146,7 +146,7 @@ public class OutputFragment extends BaseFragment {
 
 		//示例代码<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-		showShortToast(TAG + ": userId = " + userId + "; userName = " + userName);
+//		showShortToast(TAG + ": userId = " + userId + "; userName = " + userName);
 
 		showProgressDialog(R.string.loading);
 

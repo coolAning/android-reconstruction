@@ -160,6 +160,7 @@ public class LoginActivity extends BaseActivity implements OnBottomDragListener 
 
 				// 启动另一个Activity
 				startActivity(intent);
+				finish(); // 关闭当前的Activity
 			}
 		});
 	}

@@ -71,7 +71,7 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	@Override
 	public void initView() {// 必须调用
 		super.initView();
-		exitAnim = R.anim.bottom_push_out;
+//		exitAnim = R.anim.bottom_push_out;
 	}
 
 
@@ -97,10 +97,8 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	protected Fragment getFragment(int position) {
 		switch (position) {
 		case 1:
-			showShortToast("结果");
 			return OutputFragment.createInstance(0);
 		case 2:
-			showShortToast("设置");
 			return SettingFragment.createInstance();
 		default:
 			return CameraFragment.createInstance(0);
@@ -166,10 +164,10 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 		//将Activity的onDragBottom事件传递到Fragment，非必要<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		switch (currentPosition) {
 		case 2:
-			showShortToast("2");
+//			showShortToast("2");
 			break;
 		default:
-			showShortToast("default");
+//			showShortToast("default");
 			break;
 		}
 		//将Activity的onDragBottom事件传递到Fragment，非必要>>>>>>>>>>>>>>>>>>>>>>>>>>>
