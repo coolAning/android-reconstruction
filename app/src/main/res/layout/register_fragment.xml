@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/activity_page">
+
+<!--    <RelativeLayout style="@style/topbar_bg">-->
+
+<!--        <ImageButton-->
+<!--            style="@style/topbar_return_img"-->
+<!--            android:contentDescription="@string/exit" />-->
+
+<!--        <TextView-->
+<!--            style="@style/topbar_title"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:text="@string/register" />-->
+
+<!--    </RelativeLayout>-->
+
+    <RelativeLayout
+        style="@style/activity_page"
+        android:background="@color/alpha_1">
+
+
+        <LinearLayout
+            style="@style/ll_vertical_match_wrap"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <EditText
+                style="@style/edit_item_right_et_padding"
+                android:background="@color/gray_interest"
+                android:hint="@string/email"
+                android:autofillHints="username"
+                android:layout_margin="10dp"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                style="@style/edit_item_right_et_padding"
+                android:background="@color/gray_interest"
+                android:hint="@string/password"
+                android:autofillHints="password"
+                android:layout_margin="10dp"
+                android:inputType="textPassword" />
+            <EditText
+                style="@style/edit_item_right_et_padding"
+                android:background="@color/gray_interest"
+                android:hint="@string/re_password"
+                android:autofillHints="password"
+                android:layout_margin="10dp"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/register"
+                style="@style/buttom_bottom_blue"
+                android:layout_width="200dp"
+                android:layout_marginTop="80dp"
+                android:text="@string/register" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

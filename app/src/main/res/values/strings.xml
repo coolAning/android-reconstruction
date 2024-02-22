@@ -4,9 +4,16 @@
     <string name="exit">退出</string>
     <string name="login">登录</string>
     <string name="username">用户名</string>
+    <string name="email">邮箱</string>
     <string name="password">密码</string>
+    <string name="new_password">新密码</string>
+    <string name="re_password">再次输入密码</string>
     <string name="register">注册</string>
     <string name="forget_password">忘记密码</string>
+    <string name="retrieve_password">找回密码</string>
+    <string name="change">修改</string>
+    <string name="code">验证码</string>
+    <string name="send_code">发送验证码</string>
 
     <!--系统名词-->
     <string name="reconstruction">三维重建系统</string>
