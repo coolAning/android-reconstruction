@@ -47,6 +47,7 @@
                 android:inputType="textEmailAddress" />
 
             <EditText
+                android:id="@+id/password"
                 style="@style/edit_item_right_et_padding"
                 android:layout_margin="10dp"
                 android:autofillHints="password"

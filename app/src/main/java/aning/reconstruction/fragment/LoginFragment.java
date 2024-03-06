@@ -14,6 +14,8 @@ limitations under the License.*/
 
 package aning.reconstruction.fragment;
 
+import static zuo.biao.library.util.JSON.parseObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +23,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import aning.reconstruction.R;
 import aning.reconstruction.activity.MainTabActivity;
 import aning.reconstruction.interfaces.OnDataPassListener;
+import aning.reconstruction.model.Response;
+import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseFragment;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
 
 
 /**
@@ -97,12 +104,16 @@ public class LoginFragment extends BaseFragment {
 	private Button btLogin;
 	private ImageButton ibRegister;
 	private ImageButton ibForgetPassword;
+	private EditText account;
+	private EditText password;
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
 
 		btLogin = findView(R.id.login);
 		ibRegister = findView(R.id.register_btn);
 		ibForgetPassword = findView(R.id.forget_password_btn);
+		account = findView(R.id.username);
+		password = findView(R.id.password);
 
 	}
 
@@ -151,18 +162,45 @@ public class LoginFragment extends BaseFragment {
 
 	private RegisterFragment registerFragment;
 	private RetrievePasswordFragment retrievePasswordFragment;
+	private final int requestCodeLogin = 1;
 	@Override
 	public void initEvent() {//必须在onCreate方法内调用
 		btLogin.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// 创建一个意图，从当前Activity跳转到另一个Activity
-				Intent intent = MainTabActivity.createIntent(getActivity(), userId);
-				// intent.putExtra("key", value);
+				String account = LoginFragment.this.account.getText().toString().trim();
+				String password = LoginFragment.this.password.getText().toString().trim();
+				if(account.isEmpty()||password.isEmpty()){
+					showShortToast(R.string.not_empty);
+				}else{
+					HttpRequest.login(account, password,requestCodeLogin,new OnHttpResponseListener() {
+						@Override
+						public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+							if (e != null) {
+								showShortToast(R.string.login_faild);
+							}else {
+								if (requestCode == requestCodeLogin) {
+									try {
+										Response response = parseObject(resultJson, Response.class);
+										if (response != null && response.getCode()!=0){
+											showShortToast(response.getMsg());
+										} else {
+											Intent intent = MainTabActivity.createIntent(getActivity(), userId);
+											toActivity(intent);
+											getActivity().finish(); // 关闭当前的Activity
+										}
+									} catch (NullPointerException error) {
+										showShortToast(R.string.sys_error);
+									}
+								}
+							}
+						}
+					});
+				}
 
-				// 启动另一个Activity
-				toActivity(intent);
-				getActivity().finish(); // 关闭当前的Activity
+
+
+
 			}
 		});
 		ibRegister.setOnClickListener(new View.OnClickListener() {

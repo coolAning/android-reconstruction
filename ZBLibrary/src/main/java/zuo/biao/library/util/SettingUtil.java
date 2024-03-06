@@ -64,7 +64,7 @@ public final class SettingUtil {
 	public static boolean vibrate = true;//开启震动
 	public static boolean noDisturb = false;//夜间防打扰
 
-	public static boolean isOnTestMode = false;//测试模式
+	public static boolean isOnTestMode = true;//测试模式
 	public static boolean isFirstStart = true;//第一次打开应用
 
 	public static final boolean[] defaultValues;
@@ -237,7 +237,7 @@ public final class SettingUtil {
 	/**
 	 * TODO 改为你的测试服务器地址,如果有的话
 	 */
-	public static final String URL_SERVER_ADDRESS_TEST = "https://github.com/TommyLemon/Android-ZBLibrary";//测试服务器
+	public static final String URL_SERVER_ADDRESS_TEST = "http://118.202.10.14:5000";//测试服务器
 
 	/**获取当前服务器地址
 	 * isHttps = false
