@@ -27,6 +27,7 @@
             android:padding="10dp">
 
             <EditText
+                android:id="@+id/account"
                 style="@style/edit_item_right_et_padding"
                 android:background="@color/gray_interest"
                 android:hint="@string/email"
@@ -35,18 +36,21 @@
                 android:inputType="textEmailAddress" />
 
             <EditText
+                android:id="@+id/password"
                 style="@style/edit_item_right_et_padding"
                 android:background="@color/gray_interest"
                 android:hint="@string/password"
                 android:autofillHints="password"
                 android:layout_margin="10dp"
                 android:inputType="textPassword" />
+
             <EditText
+                android:id="@+id/passwordAgain"
                 style="@style/edit_item_right_et_padding"
+                android:layout_margin="10dp"
+                android:autofillHints="password"
                 android:background="@color/gray_interest"
                 android:hint="@string/re_password"
-                android:autofillHints="password"
-                android:layout_margin="10dp"
                 android:inputType="textPassword" />
 
             <Button

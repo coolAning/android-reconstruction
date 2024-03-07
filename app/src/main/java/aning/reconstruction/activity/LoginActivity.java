@@ -204,6 +204,9 @@ public class LoginActivity extends BaseActivity implements OnBottomDragListener 
 						.commit();
 				break;
 			default:
+				if (fragmentManager.getBackStackEntryCount() > 1) {
+					fragmentManager.popBackStack();
+				}
 				break;
 		}
 

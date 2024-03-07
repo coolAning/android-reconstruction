@@ -16,6 +16,8 @@
     <string name="send_code">发送验证码</string>
     <string name="not_empty">用户名或密码不能为空</string>
     <string name="sys_error">系统异常</string>
+    <string name="password_not_same">密码不一致</string>
+    <string name="register_faild">注册失败，请检查网络后重试</string>
 
     <!--系统名词-->
     <string name="reconstruction">三维重建系统</string>

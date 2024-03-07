@@ -86,17 +86,17 @@ public class HttpRequest {
     /**
      * 注册
      *
-     * @param phone
+     * @param account
      * @param password
      * @param listener
      */
-    public static void register(final String phone, final String password,
+    public static void register(final String account, final String password,
                                 final int requestCode, final OnHttpResponseListener listener) {
         Map<String, Object> request = new HashMap<>();
-        request.put(ACCOUNT, phone);
+        request.put(ACCOUNT, account);
         request.put(PASSWORD, MD5Util.MD5(password));
 
-        HttpManager.getInstance().post(request, URL_BASE + "/register", requestCode, listener);
+        HttpManager.getInstance().post(request, URL_BASE + "/user/register",true, requestCode, listener);
     }
 
     /**
