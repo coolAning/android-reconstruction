@@ -182,14 +182,17 @@ public class LoginFragment extends BaseFragment {
 								if (requestCode == requestCodeLogin) {
 									try {
 										Response response = parseObject(resultJson, Response.class);
-										if (response != null && response.getCode()!=0){
-											showShortToast(response.getMsg());
-										} else {
+										if (response == null) {
+											throw new Exception("Response is null");
+										}
+										if (response.getCode() == 0) {
 											Intent intent = MainTabActivity.createIntent(getActivity(), userId);
 											toActivity(intent);
 											getActivity().finish(); // 关闭当前的Activity
+										} else {
+											showShortToast(response.getMsg());
 										}
-									} catch (NullPointerException error) {
+									} catch (Exception error) {
 										showShortToast(R.string.sys_error);
 									}
 								}

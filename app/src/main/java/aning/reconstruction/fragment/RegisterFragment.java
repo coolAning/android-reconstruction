@@ -177,16 +177,17 @@ public class RegisterFragment extends BaseFragment {
                                     if (requestCode == requestCodeRegister) {
                                         try {
                                             Response response = parseObject(resultJson, Response.class);
-                                            if (response != null && response.getCode() != 0) {
-                                                showShortToast(response.getMsg());
-                                            } else {
-
+                                            if (response == null) {
+                                                throw new Exception("Response is null");
+                                            }
+                                            if (response.getCode() == 0) {
                                                 if (mCallback != null) {
                                                     mCallback.onFragmentMessageListener(0);
                                                 }
-
+                                            } else {
+                                                showShortToast(response.getMsg());
                                             }
-                                        } catch (NullPointerException error) {
+                                        } catch (Exception error) {
                                             showShortToast(R.string.sys_error);
                                         }
                                     }

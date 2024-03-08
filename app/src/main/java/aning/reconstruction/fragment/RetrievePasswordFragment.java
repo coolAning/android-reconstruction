@@ -14,7 +14,10 @@ limitations under the License.*/
 
 package aning.reconstruction.fragment;
 
+import static zuo.biao.library.util.JSON.parseObject;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -32,9 +35,13 @@ import java.util.List;
 
 import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
+import aning.reconstruction.activity.MainTabActivity;
 import aning.reconstruction.activity.UserActivity;
 import aning.reconstruction.interfaces.OnDataPassListener;
+import aning.reconstruction.model.Response;
+import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseFragment;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.model.Entry;
 
 
@@ -153,6 +160,8 @@ public class RetrievePasswordFragment extends BaseFragment {
 
     //Event事件区(只要存在事件监听代码就是)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+    private final int requestCodeCaptcha = 1;
+    private final int requestCodeRetrieve = 2;
 
     @Override
     public void initEvent() {//必须在onCreateView方法内调用
@@ -166,7 +175,30 @@ public class RetrievePasswordFragment extends BaseFragment {
                     sendCodeTV.setClickable(false);
                     sendCodeTV.setTextColor(getResources().getColor(R.color.gray));
                     // 发送逻辑
-
+                    HttpRequest.sendCode(accountET.getText().toString().trim(), requestCodeCaptcha, new OnHttpResponseListener() {
+                        @Override
+                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                            if (e != null) {
+                                showShortToast(e.getMessage());
+                            } else {
+                                if(requestCode == requestCodeCaptcha){
+                                    try {
+                                        Response response = parseObject(resultJson, Response.class);
+                                        if (response == null) {
+                                            throw new Exception("Response is null");
+                                        }
+                                        if (response.getCode() == 0) {
+                                            showShortToast("验证码已发送");
+                                        } else {
+                                            showShortToast(response.getMsg());
+                                        }
+                                    } catch (Exception error) {
+                                        showShortToast(R.string.sys_error);
+                                    }
+                                }
+                            }
+                        }
+                    });
 
                     // 创建一个60秒的倒计时，每秒更新一次
                     new CountDownTimer(60000, 1000) {
@@ -202,12 +234,37 @@ public class RetrievePasswordFragment extends BaseFragment {
                     showShortToast("两次输入的密码不一致");
                 } else {
                     // 找回密码逻辑
+                    HttpRequest.forgetPassword(account, password, code, requestCodeRetrieve, new OnHttpResponseListener() {
+                        @Override
+                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                            if (e != null) {
+                                showShortToast(R.string.net_error);
+                            } else {
+                                if (requestCode == requestCodeRetrieve) {
+                                    try {
+                                        Response response = parseObject(resultJson, Response.class);
+                                        if (response == null) {
+                                            throw new Exception("Response is null");
+                                        }
+                                        if (response.getCode() == 0) {
+                                            showShortToast("密码修改成功");
+                                            // 找回密码成功后，返回登录页面
+                                            if (mCallback != null) {
+                                                mCallback.onFragmentMessageListener(0);
+                                            }
+                                        } else {
+                                            showShortToast(response.getMsg());
+                                        }
+                                    } catch (Exception error) {
+                                        showShortToast(error.getMessage());
+                                    }
+
+                                }
+                            }
+                        }
+                    });
 
 
-                    // 找回密码成功后，返回登录页面
-                    if (mCallback != null) {
-                        mCallback.onFragmentMessageListener(0);
-                    }
                 }
 
             }

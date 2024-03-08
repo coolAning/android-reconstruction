@@ -58,27 +58,8 @@ public class HttpRequest {
 
     public static final String ACCOUNT = "account";
     public static final String PASSWORD = "password";
-    /**
-     * 翻译，根据有道翻译API文档请求
-     * http://fanyi.youdao.com/openapi?path=data-mode
-     * <br > 本Demo中只有这个是真正可用，其它需要自己根据接口文档新增或修改
-     *
-     * @param word
-     * @param requestCode
-     * @param listener
-     */
-    public static void translate(String word, final int requestCode, final OnHttpResponseListener listener) {
-        Map<String, Object> request = new HashMap<>();
-        request.put("q", word);
-        request.put("keyfrom", "ZBLibrary");
-        request.put("key", 1430082675);
-        request.put("type", "data");
-        request.put("doctype", "json");
-        request.put("version", "1.1");
-
-        HttpManager.getInstance().get(request, "http://fanyi.youdao.com/openapi.do", requestCode, listener);
-    }
-
+    public static final String NEW_PASSWORD = "new_password";
+    public static final String CAPTCHA = "captcha";
 
     //account<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -115,23 +96,24 @@ public class HttpRequest {
         HttpManager.getInstance().post(request, URL_BASE + "/user/login",true, requestCode, listener);
     }
 
-    //account>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
-    /**
-     * 获取用户
-     *
-     * @param userId
-     * @param requestCode
-     * @param listener
-     */
-    public static void getUser(long userId, final int requestCode, final OnHttpResponseListener listener) {
+    public static void sendCode(final String account, final int requestCode, final OnHttpResponseListener listener) {
         Map<String, Object> request = new HashMap<>();
-        request.put(CURRENT_USER_ID, Application.getInstance().getCurrentUserId());
-        request.put(USER_ID, userId);
-
-        HttpManager.getInstance().get(request, URL_BASE + "/user", requestCode, listener);
+        request.put("account", account);
+        HttpManager.getInstance().post(request, URL_BASE + "/user/captcha",true, requestCode, listener);
     }
+
+    public static void forgetPassword(final String account, final String newPassword, final String code,
+                                      final int requestCode, final OnHttpResponseListener listener) {
+        Map<String, Object> request = new HashMap<>();
+        request.put(ACCOUNT, account);
+        request.put(NEW_PASSWORD, MD5Util.MD5(newPassword));
+        request.put(CAPTCHA, code);
+
+        HttpManager.getInstance().post(request, URL_BASE + "/user/forgetPassword", true,requestCode, listener);
+    }
+
+    //account>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     public static final int USER_LIST_RANGE_ALL = 0;
     public static final int USER_LIST_RANGE_RECOMMEND = 1;
