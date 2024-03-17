@@ -97,11 +97,11 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	protected Fragment getFragment(int position) {
 		switch (position) {
 		case 1:
-			return OutputFragment.createInstance(0);
+			return OutputFragment.createInstance(userId);
 		case 2:
 			return SettingFragment.createInstance();
 		default:
-			return CameraFragment.createInstance(0);
+			return CameraFragment.createInstance(userId);
 		}
 	};
 

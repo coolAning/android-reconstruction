@@ -73,14 +73,27 @@
             android:name="aning.reconstruction.activity.MainTabActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name="aning.reconstruction.activity.UploadActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
         <activity
             android:name="aning.reconstruction.activity.SettingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+
+
         <activity
             android:name="aning.reconstruction.activity.UserActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+
+
+
         <activity
             android:name="aning.reconstruction.DEMO.DemoMainActivity"
             android:screenOrientation="portrait"

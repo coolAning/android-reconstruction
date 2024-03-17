@@ -168,9 +168,11 @@ public class RegisterFragment extends BaseFragment {
                     return;
                 } else {
                     if (password.equals(passwordAgain)) {
+                        showProgressDialog(R.string.on_loadding);
                         HttpRequest.register(account, password, requestCodeRegister, new OnHttpResponseListener() {
                             @Override
                             public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                                dismissProgressDialog();
                                 if (e != null) {
                                     showShortToast(R.string.register_faild);
                                 } else {

@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.Map;
+
 import aning.reconstruction.R;
 import aning.reconstruction.activity.MainTabActivity;
 import aning.reconstruction.interfaces.OnDataPassListener;
@@ -80,7 +82,6 @@ public class LoginFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		//TODO demo_fragment改为你所需要的layout文件
 		setContentView(R.layout.login_fragment);
 
 		argument = getArguments();
@@ -173,9 +174,11 @@ public class LoginFragment extends BaseFragment {
 				if(account.isEmpty()||password.isEmpty()){
 					showShortToast(R.string.not_empty);
 				}else{
+					showProgressDialog(R.string.on_loadding);
 					HttpRequest.login(account, password,requestCodeLogin,new OnHttpResponseListener() {
 						@Override
 						public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+							dismissProgressDialog();
 							if (e != null) {
 								showShortToast(R.string.login_faild);
 							}else {
@@ -186,6 +189,10 @@ public class LoginFragment extends BaseFragment {
 											throw new Exception("Response is null");
 										}
 										if (response.getCode() == 0) {
+
+											Map<String, Object> map = JSON.parseObject(JSON.toJSONString(response.getData()));
+											long userId = Long.parseLong(map.get("userId").toString());
+
 											Intent intent = MainTabActivity.createIntent(getActivity(), userId);
 											toActivity(intent);
 											getActivity().finish(); // 关闭当前的Activity
@@ -199,6 +206,7 @@ public class LoginFragment extends BaseFragment {
 							}
 						}
 					});
+
 				}
 
 

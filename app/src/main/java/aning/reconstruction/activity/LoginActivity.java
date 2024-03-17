@@ -247,7 +247,6 @@ public class LoginActivity extends BaseActivity implements OnBottomDragListener 
 				System.exit(0);
 			}
 		}
-
 	}
 	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -14,12 +14,16 @@ limitations under the License.*/
 
 package aning.reconstruction.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -27,6 +31,7 @@ import java.util.List;
 
 import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
+import aning.reconstruction.activity.UploadActivity;
 import aning.reconstruction.activity.UserActivity;
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.model.Entry;
@@ -95,13 +100,16 @@ public class CameraFragment extends BaseFragment {
 
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-//	private ListView lvDemoFragment;
+	private Button btnFile;
+	private Button btnCamera;
+	private Button btnDrone;
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
 
-		//示例代码<<<<<<<<<<<<<<
-//		lvDemoFragment = findView(R.id.lvDemoFragment);
-		//示例代码>>>>>>>>>>>>>>
+		btnFile = findView(R.id.btnFile);
+		btnCamera = findView(R.id.btnConnectCamera);
+		btnDrone = findView(R.id.btnConnectDrone);
+
 	}
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -137,9 +145,39 @@ public class CameraFragment extends BaseFragment {
 
 	@Override
 	public void initEvent() {//必须在onCreateView方法内调用
+		btnFile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+				startActivityForResult(intent, REQUEST_CODE);
 
+			}
+		});
 	}
 
+	private static final int REQUEST_CODE = 1;
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+			Uri selectedFileUri = data.getData();
+			if (selectedFileUri == null) {
+				showShortToast(R.string.select_file_error);
+			} else {
+				String mimeType = getActivity().getContentResolver().getType(selectedFileUri);
+				String fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+
+				if (fileExtension != null && (fileExtension.equalsIgnoreCase("mp4") )) {
+					// 文件是视频
+				toActivity(UploadActivity.createIntent(context, userId, selectedFileUri));
+
+				} else {
+					showShortToast(R.string.file_not_video);
+				}
+			}
+		}
+	}
 
 	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

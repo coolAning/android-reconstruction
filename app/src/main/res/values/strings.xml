@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    用户相关-->
+    <!--    用户相关-->
     <string name="exit">退出</string>
     <string name="login">登录</string>
     <string name="username">用户名</string>
@@ -18,7 +18,24 @@
     <string name="sys_error">系统异常</string>
     <string name="password_not_same">密码不一致</string>
     <string name="register_faild">注册失败，请检查网络后重试</string>
+    <string name="on_loadding">加载中</string>
+    <!--    用户相关-->
+
+
+    <!--    相机相关-->
+    <string name="select_file_error">选择文件错误</string>
+    <string name="file_not_video">选择的文件不是mp4格式</string>
+    <string name="train_steps">训练次数</string>
+    <string name="video_name">视频名</string>
+    <string name="upload">上传</string>
+    <string name="filename_or_steps_null">文件名或训练步数不能为空</string>
+    <!--    相机相关-->
+
 
     <!--系统名词-->
     <string name="reconstruction">三维重建系统</string>
+    <!--系统名词-->
+
+
+
 </resources>

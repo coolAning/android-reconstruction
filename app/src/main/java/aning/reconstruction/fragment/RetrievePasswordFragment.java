@@ -233,10 +233,12 @@ public class RetrievePasswordFragment extends BaseFragment {
                 } else if (!password.equals(passwordAgain)) {
                     showShortToast("两次输入的密码不一致");
                 } else {
+                    showProgressDialog(R.string.on_loadding);
                     // 找回密码逻辑
                     HttpRequest.forgetPassword(account, password, code, requestCodeRetrieve, new OnHttpResponseListener() {
                         @Override
                         public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                            dismissProgressDialog();
                             if (e != null) {
                                 showShortToast(R.string.net_error);
                             } else {
