@@ -17,6 +17,7 @@ package zuo.biao.library.manager;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,6 +33,7 @@ import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -189,6 +191,11 @@ public class HttpManager {
 			, final int requestCode, final OnHttpResponseListener listener) {
 		post(request, url, false, requestCode, listener);
 	}
+
+	public void post(final Map<String, Object> request,Map<String,File>fileMap, final String url
+			, final int requestCode, final OnHttpResponseListener listener) {
+		post(request,fileMap, url, false, requestCode, listener);
+	}
 	/**POST请求
 	 * @param request 请求
 	 * @param url 网络地址
@@ -235,6 +242,93 @@ public class HttpManager {
 							client,
 							new Request.Builder()
                                     .url(url)
+									.post(requestBody)
+									.build()
+					);
+					Log.d(TAG, "\n post  result = \n" + result + "\n >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n");
+				} catch (Exception e) {
+					Log.e(TAG, "post  AsyncTask.doInBackground  try {  result = getResponseJson(..." +
+							"} catch (Exception e) {\n" + e.getMessage());
+					return e;
+				}
+
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Exception exception) {
+				super.onPostExecute(exception);
+				listener.onHttpResponse(requestCode, result, exception);
+			}
+
+		}.execute();
+	}
+
+
+	/**
+	 * 添加了上传文件的接口
+	 * @param request
+	 * @param fileMap
+	 * @param url
+	 * @param isJson
+	 * @param requestCode
+	 * @param listener
+	 */
+	public void post(final Map<String, Object> request, final Map<String, File> fileMap, final String url, final boolean isJson
+			, final int requestCode, final OnHttpResponseListener listener) {
+		new AsyncTask<Void, Void, Exception>() {
+
+			String result;
+			@Override
+			protected Exception doInBackground(Void... params) {
+
+				try {
+					OkHttpClient client = getHttpClient(url);
+					if (client == null) {
+						return new Exception(TAG + ".post  AsyncTask.doInBackground  client == null >> return;");
+					}
+
+					RequestBody requestBody;
+
+					if(fileMap != null && !fileMap.isEmpty()){
+						MultipartBody.Builder builder = new MultipartBody.Builder()
+								.setType(MultipartBody.FORM);
+
+						// 添加文件
+						for (Map.Entry<String, File> entry : fileMap.entrySet()) {
+							RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), entry.getValue());
+							builder.addFormDataPart(StringUtil.trim(entry.getKey()), entry.getValue().getName(), fileBody);
+						}
+
+						// 添加其他参数
+						if (request != null){
+							for (Map.Entry<String, Object> entry : request.entrySet()) {
+								builder.addFormDataPart(StringUtil.trim(entry.getKey()), StringUtil.trim(entry.getValue()));
+							}
+						}
+
+						requestBody = builder.build();
+					} else if (isJson) {
+						String body = JSON.toJSONString(request);
+						Log.d(TAG, "\n\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n post  url = " + url + "\n request = \n" + body);
+						requestBody = RequestBody.create(TYPE_JSON, body);
+					}
+					else {
+						FormBody.Builder builder = new FormBody.Builder();
+						Set<Map.Entry<String, Object>> set = request == null ? null : request.entrySet();
+						if (set != null) {
+							for (Map.Entry<String, Object> entry : set) {
+								builder.add(StringUtil.trim(entry.getKey()), StringUtil.trim(entry.getValue()));
+							}
+						}
+
+						requestBody = builder.build();
+					}
+
+					result = getResponseJson(
+							client,
+							new Request.Builder()
+									.url(url)
 									.post(requestBody)
 									.build()
 					);

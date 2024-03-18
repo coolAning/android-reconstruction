@@ -15,6 +15,7 @@ limitations under the License.*/
 package aning.reconstruction.util;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,14 +53,16 @@ public class HttpRequest {
 
     public static final String RANGE = "range";
 
-    public static final String ID = "id";
-    public static final String USER_ID = "userId";
+    public static final String FILE = "file";
+    public static final String USER_ID = "user_id";
     public static final String CURRENT_USER_ID = "currentUserId";
 
     public static final String ACCOUNT = "account";
     public static final String PASSWORD = "password";
     public static final String NEW_PASSWORD = "new_password";
     public static final String CAPTCHA = "captcha";
+    public static final String TRAIN_STEPS = "n_steps";
+    public static final String VIDEO_NAME = "video_name";
 
     //account<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -96,13 +99,26 @@ public class HttpRequest {
         HttpManager.getInstance().post(request, URL_BASE + "/user/login",true, requestCode, listener);
     }
 
-
+    /**
+     * 发送验证码
+     * @param account
+     * @param requestCode
+     * @param listener
+     */
     public static void sendCode(final String account, final int requestCode, final OnHttpResponseListener listener) {
         Map<String, Object> request = new HashMap<>();
         request.put("account", account);
         HttpManager.getInstance().post(request, URL_BASE + "/user/captcha",true, requestCode, listener);
     }
 
+    /**
+     * 修改密码
+     * @param account
+     * @param newPassword
+     * @param code
+     * @param requestCode
+     * @param listener
+     */
     public static void forgetPassword(final String account, final String newPassword, final String code,
                                       final int requestCode, final OnHttpResponseListener listener) {
         Map<String, Object> request = new HashMap<>();
@@ -114,6 +130,19 @@ public class HttpRequest {
     }
 
     //account>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+    //camera<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    public static void uploadVideo(File videoFile, final int trainSteps ,final String videoName, final int requestCode, final OnHttpResponseListener listener) {
+        Map<String, Object> request = new HashMap<>();
+        request.put(USER_ID, Application.getInstance().getCurrentUserId());
+        request.put(TRAIN_STEPS, trainSteps);
+        request.put(VIDEO_NAME,videoName);
+        Map<String,File> fileMap = new HashMap<>();
+        fileMap.put(FILE,videoFile);
+        HttpManager.getInstance().post(request,fileMap ,URL_BASE + "/camera/file", requestCode, listener);
+    }
 
     public static final int USER_LIST_RANGE_ALL = 0;
     public static final int USER_LIST_RANGE_RECOMMEND = 1;

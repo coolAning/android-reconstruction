@@ -78,8 +78,7 @@ public class OutputFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		//TODO demo_fragment改为你所需要的layout文件
-		setContentView(R.layout.demo_fragment);
+		setContentView(R.layout.output_fragment);
 
 		argument = getArguments();
 		if (argument != null) {
@@ -99,20 +98,17 @@ public class OutputFragment extends BaseFragment {
 
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-	//示例代码<<<<<<<<
-	private ListView lvDemoFragment;
-	//示例代码>>>>>>>>
+	private ListView outputLV;
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
 
-		//示例代码<<<<<<<<<<<<<<
-		lvDemoFragment = findView(R.id.lvDemoFragment);
-		//示例代码>>>>>>>>>>>>>>
+		outputLV = findView(R.id.output_list);
+
 	}
 
-	//示例代码<<<<<<<<
+
 	private DemoAdapter adapter;
-	//示例代码>>>>>>>>
+
 	/** 示例方法 ：显示列表内容
 	 * @author author
 	 * @param list
@@ -120,7 +116,7 @@ public class OutputFragment extends BaseFragment {
 	private void setList(List<Entry<String, String>> list) {
 		if (adapter == null) {
 			adapter = new DemoAdapter(context);
-			lvDemoFragment.setAdapter(adapter);
+			outputLV.setAdapter(adapter);
 		}
 		adapter.refresh(list);
 	}
@@ -198,10 +194,11 @@ public class OutputFragment extends BaseFragment {
 	public void initEvent() {//必须在onCreateView方法内调用
 		//示例代码<<<<<<<<<<<<<<<<<<<
 
-		lvDemoFragment.setOnItemClickListener(new OnItemClickListener() {
+		outputLV.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				toActivity(UserActivity.createIntent(context, position));//一般用id，这里position仅用于测试 id));//
+				showShortToast("onItemClick  position = " + position);
+//				toActivity(UserActivity.createIntent(context, position));//一般用id，这里position仅用于测试 id));
 			}
 		});
 		//示例代码>>>>>>>>>>>>>>>>>>>

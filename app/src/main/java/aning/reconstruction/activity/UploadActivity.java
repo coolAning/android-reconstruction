@@ -14,10 +14,16 @@ limitations under the License.*/
 
 package aning.reconstruction.activity;
 
+import static zuo.biao.library.util.JSON.parseObject;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,10 +32,20 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 import android.net.Uri;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.io.File;
+import java.util.Map;
+
 import aning.reconstruction.R;
+import aning.reconstruction.model.Response;
+import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
 
 
 /**activity示例
@@ -69,6 +85,17 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 		intent = getIntent();
 		userId = intent.getLongExtra(INTENT_USER_ID, userId);
 		videoUri = intent.getData();
+
+		//存储权限获取
+		if (ContextCompat.checkSelfPermission(UploadActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+				!= PackageManager.PERMISSION_GRANTED) {
+
+			ActivityCompat.requestPermissions(UploadActivity.this,
+					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+					PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+		}
+
+
 		//功能归类分区方法，必须调用<<<<<<<<<<
 		initView();
 		initData();
@@ -139,21 +166,49 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 
 
 	//Event事件区(只要存在事件监听代码就是)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+	private final int requestCodeUpload = 1;
+	private final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 	@Override
 	public void initEvent() {//必须在onCreate方法内调用
 		UploadButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				showProgressDialog(R.string.on_uploadding);
 				String fileName = fileNameET.getText().toString().trim();
 				String trainSteps = trainStepsET.getText().toString().trim();
 				if (fileName.isEmpty() || trainSteps.isEmpty()) {
 					showShortToast(R.string.filename_or_steps_null);
 				}else {
 					int trainStepsInt = Integer.parseInt(trainSteps);
+					File videoFile = new File(getRealPathFromURI(UploadActivity.this, videoUri));
+					System.out.println(videoFile.getAbsolutePath());
+					HttpRequest.uploadVideo(videoFile,trainStepsInt ,fileName , requestCodeUpload ,new OnHttpResponseListener() {
+						@Override
+						public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+							dismissProgressDialog();
+							if (e != null) {
+								showShortToast(R.string.upload_faild);
+							}else {
+								if (requestCode == requestCodeUpload) {
+									try {
+										Response response = parseObject(resultJson, Response.class);
+										if (response == null) {
+											throw new Exception("Response is null");
+										}
+										if (response.getCode() == 0) {
+											showShortToast(R.string.upload_success);
+											getActivity().finish(); // 关闭当前的Activity
 
-					//TODO 上传视频
-					showShortToast(userId +" " + fileName + " " + trainStepsInt);
+										} else {
+											showShortToast(response.getMsg());
+										}
+									} catch (Exception error) {
+										showShortToast(R.string.sys_error);
+									}
+								}
+							}
+						}
+					});
 
 				}
 			}
@@ -187,6 +242,47 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 		finish();
 	}
 
+	public static String getRealPathFromURI(Context context, Uri contentUri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		Cursor cursor = null;
+		try {
+			cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
+			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			if (cursor.moveToFirst()) {
+				return cursor.getString(column_index);
+			}
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 存储权限获取回调
+	 * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
+	 * @param permissions The requested permissions. Never null.
+	 * @param grantResults The grant results for the corresponding permissions
+	 *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+	 *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+	 *
+	 */
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					return;
+				} else {
+					getActivity().finish(); // 关闭当前的Activity
+				}
+				return;
+			}
+		}
+	}
 
 	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
