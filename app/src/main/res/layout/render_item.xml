@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ll_vertical_match_wrap"
+    android:background="@drawable/to_alpha"
+    android:gravity="center" >
+
+    <zuo.biao.library.ui.SquareRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:background="@color/alpha_3"
+            android:scaleType="centerCrop"
+            android:id="@+id/picture_iv"
+            style="@style/match_match" />
+
+    </zuo.biao.library.ui.SquareRelativeLayout>
+
+    <TextView
+        android:id="@+id/name_tv"
+        style="@style/text_middle"
+        android:visibility="gone" />
+
+</LinearLayout>

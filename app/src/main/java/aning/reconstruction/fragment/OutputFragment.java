@@ -19,32 +19,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
-import aning.reconstruction.activity.UserActivity;
-import zuo.biao.library.base.BaseFragment;
+import aning.reconstruction.adapter.RenderAdapter;
+import zuo.biao.library.base.BaseListFragment;
+import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.model.Entry;
+import zuo.biao.library.ui.GridAdapter;
 
 
-/** 使用方法：复制>粘贴>改名>改代码 */
-
-/**fragment示例
- * @author Lemon
- * @use new DemoFragment(),具体参考.DemoFragmentActivity(initData方法内)
- */
-public class OutputFragment extends BaseFragment {
+public class OutputFragment extends BaseListFragment<Entry<String, String>, GridView, RenderAdapter> {
 	private static final String TAG = "OutputFragment";
 
 	//与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
 	public static final String ARGUMENT_USER_ID = "ARGUMENT_USER_ID";
 	public static final String ARGUMENT_USER_NAME = "ARGUMENT_USER_NAME";
+	/**创建一个Fragment实例
+	 * @return
+	 */
+	public static OutputFragment createInstance() {
+		return new OutputFragment();
+	}
 
 	/**创建一个Fragment实例
 	 * @param userId
@@ -72,19 +71,10 @@ public class OutputFragment extends BaseFragment {
 	//与Activity通信>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-
-	private long userId = 0;
-	private String userName = null;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		setContentView(R.layout.output_fragment);
-
-		argument = getArguments();
-		if (argument != null) {
-			userId = argument.getLong(ARGUMENT_USER_ID, userId);
-			userName = argument.getString(ARGUMENT_USER_NAME, userName);
-		}
 
 		//功能归类分区方法，必须调用<<<<<<<<<<
 		initView();
@@ -92,34 +82,38 @@ public class OutputFragment extends BaseFragment {
 		initEvent();
 		//功能归类分区方法，必须调用>>>>>>>>>>
 
+		onRefresh();
+
 		return view;//返回值必须为view
 	}
 
 
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-	private ListView outputLV;
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
-
-		outputLV = findView(R.id.output_list);
+		super.initView();
 
 	}
 
+	@Override
+	public void setList(final List<Entry<String, String>> list) {
+		//示例代码<<<<<<<<<<<<<<<
+		setList(new AdapterCallBack<RenderAdapter>() {
 
-	private DemoAdapter adapter;
+			@Override
+			public void refreshAdapter() {
+				adapter.refresh(list);
+			}
 
-	/** 示例方法 ：显示列表内容
-	 * @author author
-	 * @param list
-	 */
-	private void setList(List<Entry<String, String>> list) {
-		if (adapter == null) {
-			adapter = new DemoAdapter(context);
-			outputLV.setAdapter(adapter);
-		}
-		adapter.refresh(list);
+			@Override
+			public RenderAdapter createAdapter() {
+				return new RenderAdapter(context);
+			}
+		});
+		//示例代码>>>>>>>>>>>>>>>
 	}
+
 
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -134,48 +128,28 @@ public class OutputFragment extends BaseFragment {
 
 	//Data数据区(存在数据获取或处理代码，但不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-	//示例代码<<<<<<<<
-	private List<Entry<String, String>> list;
-	//示例代码>>>>>>>>>
 	@Override
 	public void initData() {//必须在onCreateView方法内调用
+		super.initData();
 
-		//示例代码<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-//		showShortToast(TAG + ": userId = " + userId + "; userName = " + userName);
-
-		showProgressDialog(R.string.loading);
-
-		runThread(TAG + "initData", new Runnable() {
-			@Override
-			public void run() {
-
-				list = getList(userId);
-				runUiThread(new Runnable() {
-					@Override
-					public void run() {
-						dismissProgressDialog();
-						setList(list);
-					}
-				});
-			}
-		});
-
-		//示例代码>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	}
 
 
-	/**示例方法：获取号码列表
-	 * @author lemon
-	 * @param userId
-	 * @return
-	 */
-	protected List<Entry<String, String>> getList(long userId) {
-		list = new ArrayList<Entry<String, String>>();
-		for (int i = 0; i < 64; i++) {
-			list.add(new Entry<String, String>("联系人" + i , String.valueOf(1311736568 + i*i)));
-		}
-		return list;
+	@Override
+	public void getListAsync(int page) {
+		//示例代码<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		showProgressDialog(R.string.loading);
+
+		List<Entry<String, String>> list = new ArrayList<Entry<String, String>>();
+		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "a"));
+		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "b"));
+		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "c"));
+		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "d"));
+		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "e"));
+
+
+		onLoadSucceed(page, list);
+		//示例代码>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	}
 
 
@@ -192,17 +166,23 @@ public class OutputFragment extends BaseFragment {
 
 	@Override
 	public void initEvent() {//必须在onCreateView方法内调用
-		//示例代码<<<<<<<<<<<<<<<<<<<
+		super.initEvent();
 
-		outputLV.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				showShortToast("onItemClick  position = " + position);
-//				toActivity(UserActivity.createIntent(context, position));//一般用id，这里position仅用于测试 id));
-			}
-		});
-		//示例代码>>>>>>>>>>>>>>>>>>>
+		lvBaseList.setOnItemClickListener(this);
 	}
+
+
+	//示例代码<<<<<<<<<<<<<<<<<<<
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		//实现单选
+		showShortToast("选择了 " + adapter.getItem(position).getValue());
+//		toActivity(UserActivity.createIntent(context, position));//一般用id，这里position仅用于测试 id));//
+	}
+
+	//示例代码>>>>>>>>>>>>>>>>>>>
+
+
 
 
 	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

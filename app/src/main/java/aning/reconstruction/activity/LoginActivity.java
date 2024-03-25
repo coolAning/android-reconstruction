@@ -66,7 +66,6 @@ public class LoginActivity extends BaseActivity implements OnBottomDragListener 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//TODO demo_activity改为你所需要的layout文件；传this是为了底部左右滑动手势
 		setContentView(R.layout.login_activity, this);
 
 		intent = getIntent();

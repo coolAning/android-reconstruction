@@ -23,6 +23,7 @@ import android.widget.ImageView;
 
 import aning.reconstruction.R;
 import aning.reconstruction.activity.SettingActivity;
+import aning.reconstruction.application.Application;
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.ui.AlertDialog;
 import zuo.biao.library.ui.AlertDialog.OnDialogButtonClickListener;
@@ -97,6 +98,7 @@ public class SettingFragment extends BaseFragment implements OnClickListener, On
 
 
 	private void logout() {
+		Application.getInstance().logout();
 		context.finish();
 	}
 

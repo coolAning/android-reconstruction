@@ -173,12 +173,12 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 		UploadButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showProgressDialog(R.string.on_uploadding);
 				String fileName = fileNameET.getText().toString().trim();
 				String trainSteps = trainStepsET.getText().toString().trim();
 				if (fileName.isEmpty() || trainSteps.isEmpty()) {
 					showShortToast(R.string.filename_or_steps_null);
 				}else {
+					showProgressDialog(R.string.on_uploadding);
 					int trainStepsInt = Integer.parseInt(trainSteps);
 					File videoFile = new File(getRealPathFromURI(UploadActivity.this, videoUri));
 					System.out.println(videoFile.getAbsolutePath());
