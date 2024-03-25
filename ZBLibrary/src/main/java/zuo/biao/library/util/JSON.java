@@ -15,9 +15,11 @@ limitations under the License.*/
 package zuo.biao.library.util;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 
 /**阿里FastJSON封装类 防止解析时异常
  * @author Lemon
@@ -182,4 +184,19 @@ public class JSON {
 		return false;
 	}
 
+	/**
+	 * 自定义解析返回类型
+	 * @param toJSONString
+	 * @param typeReference
+	 * @return
+	 * @param <T>
+	 */
+	public static <T> T parseJson(String toJSONString, TypeReference<T> typeReference) {
+		try {
+			return com.alibaba.fastjson.JSON.parseObject(getCorrectJson(toJSONString), typeReference);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

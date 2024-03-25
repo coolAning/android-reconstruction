@@ -11,14 +11,20 @@
         <ImageView
             android:background="@color/alpha_3"
             android:scaleType="centerCrop"
-            android:id="@+id/picture_iv"
+            android:id="@+id/ivGridItemHead"
             style="@style/match_match" />
 
+        <ImageView
+            android:id="@+id/ivGridItemCheck"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:visibility="invisible" />
     </zuo.biao.library.ui.SquareRelativeLayout>
 
     <TextView
-        android:id="@+id/name_tv"
+        android:id="@+id/tvGridItemName"
         style="@style/text_middle"
-        android:visibility="gone" />
+        android:visibility="invisible" />
+
 
 </LinearLayout>

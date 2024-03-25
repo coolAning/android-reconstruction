@@ -14,6 +14,9 @@ limitations under the License.*/
 
 package aning.reconstruction.fragment;
 
+import static zuo.biao.library.util.JSON.parseObject;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,18 +24,34 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.alibaba.fastjson.TypeReference;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import aning.reconstruction.R;
+import aning.reconstruction.activity.MainTabActivity;
 import aning.reconstruction.adapter.RenderAdapter;
+import aning.reconstruction.application.Application;
+import aning.reconstruction.model.Response;
+import aning.reconstruction.model.User;
+import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseListFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.interfaces.OnStopLoadListener;
 import zuo.biao.library.model.Entry;
 import zuo.biao.library.ui.GridAdapter;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.Log;
 
 
-public class OutputFragment extends BaseListFragment<Entry<String, String>, GridView, RenderAdapter> {
+public class OutputFragment extends BaseListFragment<Entry<String, String>, GridView, RenderAdapter> implements  OnStopLoadListener, OnRefreshListener, OnLoadmoreListener {
 	private static final String TAG = "OutputFragment";
 
 	//与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -82,18 +101,17 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		initEvent();
 		//功能归类分区方法，必须调用>>>>>>>>>>
 
-		onRefresh();
-
+//		onRefresh();
+		srlBaseHttpRecycler.autoRefresh();
 		return view;//返回值必须为view
 	}
 
-
+	protected SmartRefreshLayout srlBaseHttpRecycler;
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
 		super.initView();
-
+		srlBaseHttpRecycler = findView(R.id.srlBaseHttpRecycler);
 	}
 
 	@Override
@@ -135,21 +153,42 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 	}
 
 
+	private final int requestCodeGetModelList = 1;
 	@Override
 	public void getListAsync(int page) {
-		//示例代码<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		showProgressDialog(R.string.loading);
 
 		List<Entry<String, String>> list = new ArrayList<Entry<String, String>>();
-		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "a"));
-		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "b"));
-		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "c"));
-		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "d"));
-		list.add(new Entry<String, String>("http://118.202.10.20:5001/static/screen_shot/1_shouban/0_0_0_0_0_0.png", "e"));
 
+		HttpRequest.getModelList(requestCodeGetModelList,new OnHttpResponseListener() {
+			@Override
+			public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+				if (e != null) {
+					showShortToast(R.string.load_faild);
+				}else {
+					if (requestCode == requestCodeGetModelList) {
+						try {
+							Response response = parseObject(resultJson, Response.class);
+							if (response == null) {
+								throw new Exception("Response is null");
+							}
+							if (response.getCode() == 0) {
+								List<Map<String,Object>> mapList = JSON.parseJson(JSON.toJSONString(response.getData()), new TypeReference<List<Map<String,Object>>>() {});
+								for (Map<String,Object> map : mapList) {
+									list.add(new Entry<String, String>(map.get("url").toString(), map.get("name").toString()));
+								}
+								onLoadSucceed(page, list);
+								onStopRefresh();
+							} else {
+								showShortToast(response.getMsg());
+							}
+						} catch (Exception error) {
+							showShortToast(R.string.sys_error);
+						}
+					}
+				}
+			}
+		});
 
-		onLoadSucceed(page, list);
-		//示例代码>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	}
 
 
@@ -169,42 +208,67 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		super.initEvent();
 
 		lvBaseList.setOnItemClickListener(this);
+		lvBaseList.setOnItemLongClickListener(this);
+		srlBaseHttpRecycler.setOnRefreshListener(this);
+		srlBaseHttpRecycler.setOnLoadmoreListener(this);
 	}
 
 
-	//示例代码<<<<<<<<<<<<<<<<<<<
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		//实现单选
-		showShortToast("选择了 " + adapter.getItem(position).getValue());
+		if (adapter.getCheckStatus()) {
+			adapter.setItemChecked(position, ! adapter.getItemChecked(position));
+		}else {
+			//实现单选
+			showShortToast("选择了 " + adapter.getItem(position).getValue());
 //		toActivity(UserActivity.createIntent(context, position));//一般用id，这里position仅用于测试 id));//
+		}
+
+	}
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//		adapter.setItemChecked(position, true);
+		adapter.setHasCheck(true);
+		adapter.setItemChecked(position, true);
+		return true;
 	}
 
-	//示例代码>>>>>>>>>>>>>>>>>>>
+	@Override
+	public void onRefresh(RefreshLayout refreshlayout) {
+		onRefresh();
+	}
+	@Override
+	public void onLoadmore(RefreshLayout refreshlayout) {
+//		onLoadMore();
+		onStopLoadMore(false);
+	}
 
+	@Override
+	public void onStopRefresh() {
+		runUiThread(new Runnable() {
 
+			@Override
+			public void run() {
+				srlBaseHttpRecycler.finishRefresh();
+				srlBaseHttpRecycler.setLoadmoreFinished(false);
+			}
+		});
+	}
 
+	@Override
+	public void onStopLoadMore(boolean isHaveMore) {
+		runUiThread(new Runnable() {
 
-	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-	//生命周期、onActivityResult>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-	//Event事件区(只要存在事件监听代码就是)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-
-
-
-
-
-
-	//内部类,尽量少用<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-	//内部类,尽量少用>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			@Override
+			public void run() {
+				if (isHaveMore) {
+					srlBaseHttpRecycler.finishLoadmore();
+				} else {
+					srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+				}
+				srlBaseHttpRecycler.setLoadmoreFinished(! isHaveMore);
+			}
+		});
+	}
 
 }

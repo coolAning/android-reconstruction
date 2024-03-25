@@ -144,6 +144,19 @@ public class HttpRequest {
         HttpManager.getInstance().post(request,fileMap ,URL_BASE + "/camera/file", requestCode, listener);
     }
 
+
+    /**
+     * 获取某用户的渲染模型列表
+     * @param requestCode
+     * @param listener
+     */
+    public static void getModelList(final int requestCode, final OnHttpResponseListener listener) {
+        Map<String, Object> request = new HashMap<>();
+        request.put(USER_ID, Application.getInstance().getCurrentUserId());
+
+        HttpManager.getInstance().post(request, URL_BASE + "/camera/getModelList", true,requestCode, listener);
+    }
+
     public static final int USER_LIST_RANGE_ALL = 0;
     public static final int USER_LIST_RANGE_RECOMMEND = 1;
 

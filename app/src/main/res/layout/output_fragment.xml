@@ -2,13 +2,36 @@
 <!-- 这是最简布局，可以随意更改，比如添加导航栏等 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/activity_page">
-    <GridView
-        android:id="@id/lvBaseList"
-        style="@style/lv"
-        android:layout_margin="18dp"
-        android:layout_weight="1"
-        android:horizontalSpacing="18dp"
-        android:numColumns="2"
-        android:verticalSpacing="18dp" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/match_match"
+        android:id="@id/srlBaseHttpRecycler"
+        app:srlEnableLoadmore="true"
+        app:srlEnablePreviewInEditMode="true"
+        >
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            style="@style/match_wrap"
+            />
+
+        <GridView
+            android:id="@id/lvBaseList"
+            style="@style/lv"
+            android:layout_margin="18dp"
+            android:layout_weight="1"
+            android:horizontalSpacing="18dp"
+            android:numColumns="2"
+            android:verticalSpacing="18dp" />
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            style="@style/match_wrap"
+            />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+
+
 
 </LinearLayout>

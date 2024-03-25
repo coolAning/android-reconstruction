@@ -31,6 +31,7 @@
     <string name="filename_or_steps_null">文件名或训练步数不能为空</string>
     <string name="upload_success">视频处理中</string>
     <string name="upload_faild">上传失败，请检查网络重试</string>
+    <string name="load_faild">加载失败，请检查网络重试</string>
     <string name="on_uploadding">上传中</string>
     <!--    相机相关-->
 
