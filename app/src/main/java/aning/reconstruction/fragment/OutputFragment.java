@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import aning.reconstruction.R;
+import aning.reconstruction.activity.RenderActivity;
 import aning.reconstruction.adapter.RenderAdapter;
 import aning.reconstruction.model.Response;
 import aning.reconstruction.util.HttpRequest;
@@ -112,12 +113,15 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 
 	//与Activity通信>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
+	private long userId = 0;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		setContentView(R.layout.output_fragment);
-
+		Bundle args = getArguments();
+		if (args != null) {
+			userId = args.getLong(ARGUMENT_USER_ID);
+		}
 		//功能归类分区方法，必须调用<<<<<<<<<<
 		initView();
 		initData();
@@ -242,9 +246,7 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		if (adapter.getCheckStatus()) {
 			adapter.setItemChecked(position, ! adapter.getItemChecked(position));
 		}else {
-			//实现单选
-			showShortToast("选择了 " + adapter.getItem(position).getValue());
-//		toActivity(UserActivity.createIntent(context, position));//一般用id，这里position仅用于测试 id));//
+			toActivity(RenderActivity.createIntent(context, userId, adapter.getItem(position).getValue()));
 		}
 
 	}

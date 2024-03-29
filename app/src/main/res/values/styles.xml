@@ -50,4 +50,31 @@
         <item name="android:background">@drawable/forget_password_selector</item>
         <item name="android:gravity">center</item>
     </style>
+    <!--    d按钮-->
+    <style name="d_img" parent="wrap_wrap">
+        <item name="android:background">@drawable/d_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">30dp</item>
+
+    </style>
+    <!--    s按钮-->
+    <style name="s_img" parent="wrap_wrap">
+        <item name="android:background">@drawable/s_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">30dp</item>
+
+    </style>
+    <!--    w按钮-->
+    <style name="w_img" parent="wrap_wrap">
+        <item name="android:background">@drawable/w_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">30dp</item>
+    </style>
+    <!--    a按钮-->
+    <style name="a_img" parent="wrap_wrap">
+        <item name="android:background">@drawable/a_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">30dp</item>
+
+    </style>
 </resources>

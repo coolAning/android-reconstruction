@@ -85,12 +85,16 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name="aning.reconstruction.activity.UserActivity"
+            android:name="aning.reconstruction.activity.RenderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
 
 
+        <activity
+            android:name="aning.reconstruction.activity.UserActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name="aning.reconstruction.DEMO.DemoMainActivity"
