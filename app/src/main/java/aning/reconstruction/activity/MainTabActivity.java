@@ -19,6 +19,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
 
 import aning.reconstruction.R;
 import aning.reconstruction.fragment.CameraFragment;
@@ -31,7 +33,7 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
  * @author Lemon
  * @use MainTabActivity.createIntent(...)
  */
-public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDragListener {
+public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDragListener ,OutputFragment.OnVisibilityChangeListener{
 	private static final String TAG = "MainTabActivity";
 	public static final String INTENT_USER_ID = "INTENT_USER_ID";
 
@@ -67,11 +69,15 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 
 	// UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
+	private OutputFragment outputFragment;
+	private TextView tvCancel;
+	private TextView tvDelete;
 	@Override
 	public void initView() {// 必须调用
 		super.initView();
-//		exitAnim = R.anim.bottom_push_out;
+		tvCancel = findView(R.id.cancel_tv);
+		tvDelete = findView(R.id.delete_tv);
+		outputFragment = OutputFragment.createInstance(userId);
 	}
 
 
@@ -97,7 +103,7 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	protected Fragment getFragment(int position) {
 		switch (position) {
 		case 1:
-			return OutputFragment.createInstance(userId);
+			return outputFragment;
 		case 2:
 			return SettingFragment.createInstance();
 		default:
@@ -156,6 +162,25 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 	@Override
 	public void initEvent() {// 必须调用
 		super.initEvent();
+		tvCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//取消
+				if (outputFragment != null){
+					outputFragment.cancel();
+				}
+			}
+		});
+
+		tvDelete.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//删除
+				if (outputFragment != null){
+					outputFragment.delete();
+				}
+			}
+		});
 
 	}
 
@@ -193,6 +218,18 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	// 实现outputfragment控制编辑按钮的接口
+	@Override
+	public void onVisibilityChange(int visibility) {
+		if (visibility == 0) {
+			tvCancel.setVisibility(View.VISIBLE);
+			tvDelete.setVisibility(View.VISIBLE);
+		} else {
+			tvCancel.setVisibility(View.GONE);
+			tvDelete.setVisibility(View.GONE);
+		}
 	}
 	//双击手机返回键退出>>>>>>>>>>>>>>>>>>>>>
 

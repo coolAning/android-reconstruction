@@ -63,6 +63,7 @@ public class HttpRequest {
     public static final String CAPTCHA = "captcha";
     public static final String TRAIN_STEPS = "n_steps";
     public static final String VIDEO_NAME = "video_name";
+    public static final String VIDEO_NAME_List = "video_name_list";
 
     //account<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -155,6 +156,15 @@ public class HttpRequest {
         request.put(USER_ID, Application.getInstance().getCurrentUserId());
 
         HttpManager.getInstance().post(request, URL_BASE + "/camera/getModelList", true,requestCode, listener);
+    }
+
+
+    public static void deleteModel(List<String> nameList, final int requestCode, final OnHttpResponseListener listener) {
+        Map<String, Object> request = new HashMap<>();
+        request.put(USER_ID, Application.getInstance().getCurrentUserId());
+        request.put(VIDEO_NAME_List, nameList);
+
+        HttpManager.getInstance().post(request, URL_BASE + "/camera/delete", true,requestCode, listener);
     }
 
     public static final int USER_LIST_RANGE_ALL = 0;

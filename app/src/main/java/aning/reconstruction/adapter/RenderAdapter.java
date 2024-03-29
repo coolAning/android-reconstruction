@@ -56,6 +56,13 @@ public class RenderAdapter extends BaseAdapter {
 	private boolean hasCheck = false;//是否使用标记功能
 	public RenderAdapter setHasCheck(boolean hasCheck) {
 		this.hasCheck = hasCheck;
+		//重置为全false
+		if (!hasCheck) {
+			for (Integer key : hashMap.keySet()) {
+				hashMap.put(key, false);
+			}
+		}
+		notifyDataSetChanged();
 		return this;
 	}
 
@@ -75,6 +82,9 @@ public class RenderAdapter extends BaseAdapter {
 		}
 		hashMap.put(position, isChecked);
 		notifyDataSetChanged();
+	}
+	public HashMap<Integer, Boolean> getMap() {
+		return hashMap;
 	}
 
 	public boolean getCheckStatus(){
@@ -198,6 +208,10 @@ public class RenderAdapter extends BaseAdapter {
 					Log.i(TAG, (getItemChecked(position) ? "" : "取消") + "选择第 " + position + " 个item name=" + name);
 				}
 			});
+		}else {
+			holder.ivGridItemCheck.setVisibility(View.GONE);
+			//移除亮度滤镜
+			holder.ivGridItemHead.setColorFilter(null);
 		}
 
 		return convertView;

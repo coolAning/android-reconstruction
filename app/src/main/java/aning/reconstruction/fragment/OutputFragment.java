@@ -16,6 +16,7 @@ package aning.reconstruction.fragment;
 
 import static zuo.biao.library.util.JSON.parseObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,18 +36,14 @@ import java.util.List;
 import java.util.Map;
 
 import aning.reconstruction.R;
-import aning.reconstruction.activity.MainTabActivity;
 import aning.reconstruction.adapter.RenderAdapter;
-import aning.reconstruction.application.Application;
 import aning.reconstruction.model.Response;
-import aning.reconstruction.model.User;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseListFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.interfaces.OnStopLoadListener;
 import zuo.biao.library.model.Entry;
-import zuo.biao.library.ui.GridAdapter;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.Log;
 
@@ -86,6 +83,32 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		fragment.setArguments(bundle);
 		return fragment;
 	}
+
+
+	OnVisibilityChangeListener mCallback;
+
+
+
+	// 控制activity导航栏编辑按钮的显示
+	public interface OnVisibilityChangeListener {
+		void onVisibilityChange(int visibility);
+	}
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+
+		try {
+			mCallback = (OnVisibilityChangeListener) context;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(context.toString()
+					+ " must implement OnVisibilityChangeListener");
+		}
+	}
+
+	public void changeEditMode(int visibility) {
+		mCallback.onVisibilityChange(visibility);
+	}
+
 
 	//与Activity通信>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -225,11 +248,13 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		}
 
 	}
+	private final int toBottomMenuWindowRequestCode = 1;
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 //		adapter.setItemChecked(position, true);
 		adapter.setHasCheck(true);
 		adapter.setItemChecked(position, true);
+		changeEditMode(View.VISIBLE);
 		return true;
 	}
 
@@ -269,6 +294,60 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 				srlBaseHttpRecycler.setLoadmoreFinished(! isHaveMore);
 			}
 		});
+	}
+
+	/**
+	 * 取消编辑模式
+	 */
+	public void cancel() {
+		adapter.setHasCheck(false);
+		changeEditMode(View.GONE);
+	}
+
+	/**
+	 * 删除model
+	 */
+	final int requestCodeDeleteModel = 2;
+	public void delete() {
+		Map<Integer, Boolean> map = adapter.getMap();
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < map.size(); i++) {
+			if (map.get(i)) {
+				Entry<String, String> item = adapter.getItem(i);
+				list.add(item.getValue());
+			}
+		}
+		if (list.size() != 0){
+			showProgressDialog(R.string.waiting);
+			HttpRequest.deleteModel(list, requestCodeDeleteModel, new OnHttpResponseListener() {
+				@Override
+				public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+					dismissProgressDialog();
+					if (e != null) {
+						showShortToast(R.string.delete_faild);
+					}else {
+						if (requestCode == requestCodeDeleteModel) {
+							try {
+								Response response = parseObject(resultJson, Response.class);
+								if (response == null) {
+									throw new Exception("Response is null");
+								}
+								if (response.getCode() == 0) {
+									showShortToast("删除成功");
+									srlBaseHttpRecycler.autoRefresh();
+								} else {
+									showShortToast(response.getMsg());
+								}
+							} catch (Exception error) {
+								showShortToast(R.string.sys_error);
+							}
+						}
+					}
+				}
+			});
+		}
+		adapter.setHasCheck(false);
+		changeEditMode(View.GONE);
 	}
 
 }

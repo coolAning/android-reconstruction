@@ -32,6 +32,7 @@
     <string name="upload_success">视频处理中</string>
     <string name="upload_faild">上传失败，请检查网络重试</string>
     <string name="load_faild">加载失败，请检查网络重试</string>
+    <string name="delete_faild">删除失败，请检查网络重试</string>
     <string name="on_uploadding">上传中</string>
     <!--    相机相关-->
 
@@ -42,6 +43,7 @@
 
     <!--系统相关-->
     <string name="response_null">请求异常</string>
+    <string name="waiting">请稍后</string>
     <!--系统相关-->
 
 
