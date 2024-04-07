@@ -3,6 +3,9 @@
     package="aning.reconstruction"
     android:versionCode="30"
     android:versionName="@string/app_version">
+
+
+
     <!-- 需要的权限和功能 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -39,6 +42,35 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <!-- DJI SDK need permission -->
+    <!-- Permissions and features -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.usb.accessory"
+        android:required="true" />
+
+    <!-- Permissions and features -->
+
     <application
         android:name="aning.reconstruction.application.Application"
         android:allowBackup="true"
@@ -47,7 +79,27 @@
         android:screenOrientation="portrait"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
-        <activity android:name="aning.reconstruction.DEMO.DemoThreadPoolActivity"></activity>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <!-- DJI SDK -->
+        <uses-library android:name="com.android.future.usb.accessory" />
+        <meta-data
+            android:name="com.dji.sdk.API_KEY"
+            android:value="51aee96efe65c109aca0c912" />
+        <activity
+            android:name="dji.sdk.sdkmanager.DJIAoaControllerActivity"
+            android:theme="@android:style/Theme.Translucent" >
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+        </activity>
+        <service android:name="dji.sdk.sdkmanager.DJIGlobalService" >
+        </service>
+        <!-- DJI SDK -->
+
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -88,9 +140,15 @@
             android:name="aning.reconstruction.activity.RenderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="aning.reconstruction.activity.DroneActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
 
 
+
+        <activity android:name="aning.reconstruction.DEMO.DemoThreadPoolActivity"></activity>
         <activity
             android:name="aning.reconstruction.activity.UserActivity"
             android:screenOrientation="portrait"

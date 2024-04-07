@@ -1,10 +1,15 @@
 package aning.reconstruction.application;
 
+import aning.reconstruction.activity.DroneActivity;
 import aning.reconstruction.manager.DataManager;
 import aning.reconstruction.model.User;
 import zuo.biao.library.base.BaseApplication;
 import zuo.biao.library.util.StringUtil;
+
+import android.content.Context;
 import android.util.Log;
+
+import com.secneo.sdk.Helper;
 
 public class Application extends BaseApplication {
 	private static final String TAG = "Application";
@@ -21,6 +26,15 @@ public class Application extends BaseApplication {
 
 	}
 
+	/**
+	 * 不知道干啥的方法 大疆文档说要加
+	 * @param paramContext
+	 */
+	@Override
+	protected void attachBaseContext(Context paramContext) {
+		super.attachBaseContext(paramContext);
+		Helper.install(Application.this);
+	}
 	
 	/**获取当前用户id
 	 * @return

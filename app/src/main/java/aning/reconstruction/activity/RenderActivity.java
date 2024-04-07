@@ -23,12 +23,14 @@ import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.TypeReference;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +43,7 @@ import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.model.Entry;
 import zuo.biao.library.util.JSON;
 
-public class RenderActivity extends BaseActivity implements OnBottomDragListener {
+public class RenderActivity extends BaseActivity implements OnBottomDragListener, OnHttpResponseListener {
 	private static final String TAG = "RenderActivity";
 
 
@@ -88,9 +90,27 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 
 
 	private ImageView ivRender;
+	private ImageButton ibMoveW;
+	private ImageButton ibMoveS;
+	private ImageButton ibMoveA;
+	private ImageButton ibMoveD;
+	private ImageButton ibDirectionW;
+	private ImageButton ibDirectionS;
+	private ImageButton ibDirectionA;
+	private ImageButton ibDirectionD;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
 		ivRender = findView(R.id.render_photo_iv);
+		//移动键四方位
+		ibMoveW = findView(R.id.w_ib);
+		ibMoveS = findView(R.id.s_ib);
+		ibMoveA = findView(R.id.a_ib);
+		ibMoveD = findView(R.id.d_ib);
+		//方向键四方位
+		ibDirectionW = findView(R.id.direction_w_ib);
+		ibDirectionS = findView(R.id.direction_s_ib);
+		ibDirectionA = findView(R.id.direction_a_ib);
+		ibDirectionD = findView(R.id.direction_d_ib);
 	}
 
 
@@ -127,33 +147,7 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 		runThread(TAG + "initData", new Runnable() {
 			@Override
 			public void run() {
-				HttpRequest.render(true,videoName,null,null,requestCodeRender,new OnHttpResponseListener() {
-					@Override
-					public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-						dismissProgressDialog();
-						if (e != null) {
-							showShortToast(R.string.load_faild);
-						}else {
-							if (requestCode == requestCodeRender) {
-								try {
-									Response response = parseObject(resultJson, Response.class);
-									if (response == null) {
-										throw new Exception("Response is null");
-									}
-									if (response.getCode() == 0) {
-										Map<String,String> dataMap = (Map<String, String>) response.getData();
-										setIvRender(dataMap.get("url"));
-
-									} else {
-										showShortToast(response.getMsg());
-									}
-								} catch (Exception error) {
-									showShortToast(R.string.sys_error);
-								}
-							}
-						}
-					}
-				});
+				HttpRequest.render(true,videoName,null,null,requestCodeRender,RenderActivity.this);
 			}
 		});
 	}
@@ -172,8 +166,94 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 	//Event事件区(只要存在事件监听代码就是)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	@Override
-	public void initEvent() {//必须在onCreate方法内调用
+	public void initEvent() {
+		ibMoveW.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Object> translation = new ArrayList<>();
+				translation.add("w");
+				translation.add(1);
+				HttpRequest.render(false,videoName,translation,null,requestCodeRender,RenderActivity.this);
+			}
+		});
+		ibMoveS.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Object> translation = new ArrayList<>();
+				translation.add("s");
+				translation.add(1);
+				HttpRequest.render(false,videoName,translation,null,requestCodeRender,RenderActivity.this);
+			}
+		});
+		ibMoveA.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Object> translation = new ArrayList<>();
+				translation.add("a");
+				translation.add(1);
+				HttpRequest.render(false,videoName,translation,null,requestCodeRender,RenderActivity.this);
+			}
+		});
+		ibMoveD.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Object> translation = new ArrayList<>();
+				translation.add("d");
+				translation.add(1);
+				HttpRequest.render(false,videoName,translation,null,requestCodeRender,RenderActivity.this);
+			}
+		});
 
+
+		// 方向键四方位
+		ibDirectionW.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Integer> rotationList = new ArrayList<>();
+				rotationList.add(0);
+				rotationList.add(-10);
+				rotationList.add(0);
+				HttpRequest.render(false,videoName,null,rotationList,requestCodeRender,RenderActivity.this);
+			}
+		});
+		ibDirectionS.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Integer> rotationList = new ArrayList<>();
+				rotationList.add(0);
+				rotationList.add(10);
+				rotationList.add(0);
+				HttpRequest.render(false,videoName,null,rotationList,requestCodeRender,RenderActivity.this);
+			}
+		});
+		ibDirectionA.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Integer> rotationList = new ArrayList<>();
+				rotationList.add(0);
+				rotationList.add(0);
+				rotationList.add(10);
+				HttpRequest.render(false,videoName,null,rotationList,requestCodeRender,RenderActivity.this);
+			}
+		});
+		ibDirectionD.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog(R.string.loading);
+				List<Integer> rotationList = new ArrayList<>();
+				rotationList.add(0);
+				rotationList.add(0);
+				rotationList.add(-10);
+				HttpRequest.render(false,videoName,null,rotationList,requestCodeRender,RenderActivity.this);
+			}
+		});
 	}
 
 
@@ -189,7 +269,31 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 //		finish();
 	}
 
-	//示例代码>>>>>>>>>>>>>>>>>>>
+	@Override
+	public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+		dismissProgressDialog();
+		if (e != null) {
+			showShortToast(R.string.load_faild);
+		}else {
+			if (requestCode == requestCodeRender) {
+				try {
+					Response response = parseObject(resultJson, Response.class);
+					if (response == null) {
+						throw new Exception("Response is null");
+					}
+					if (response.getCode() == 0) {
+						Map<String,String> dataMap = (Map<String, String>) response.getData();
+						setIvRender(dataMap.get("url"));
+
+					} else {
+						showShortToast(response.getMsg());
+					}
+				} catch (Exception error) {
+					showShortToast(R.string.sys_error);
+				}
+			}
+		}
+	}
 
 
 	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

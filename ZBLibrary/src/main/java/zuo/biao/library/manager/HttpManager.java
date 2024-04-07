@@ -63,7 +63,7 @@ public class HttpManager {
 
 		try {
 			//TODO 初始化自签名，demo.cer（这里demo.cer是空文件）为服务器生成的自签名证书，存放于assets目录下，如果不需要自签名可删除
-			socketFactory = SSLUtil.getSSLSocketFactory(context.getAssets().open("demo.cer"));
+//			socketFactory = SSLUtil.getSSLSocketFactory(context.getAssets().open("demo.cer"));
 		} catch (Exception e) {
 			Log.e(TAG, "HttpManager  try {" +
 					"  socketFactory = SSLUtil.getSSLSocketFactory(context.getAssets().open(\"demo.cer\"));\n" +

@@ -31,6 +31,7 @@ import java.util.List;
 
 import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
+import aning.reconstruction.activity.DroneActivity;
 import aning.reconstruction.activity.UploadActivity;
 import aning.reconstruction.activity.UserActivity;
 import zuo.biao.library.base.BaseFragment;
@@ -151,6 +152,13 @@ public class CameraFragment extends BaseFragment {
 				Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(intent, REQUEST_CODE);
 
+			}
+		});
+
+		btnDrone.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				toActivity(DroneActivity.createIntent(context, userId));
 			}
 		});
 	}

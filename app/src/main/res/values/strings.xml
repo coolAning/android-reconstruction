@@ -42,7 +42,7 @@
     <!--系统名词-->
 
     <!--系统相关-->
-    <string name="response_null">请求异常</string>
+    <string name="response_null">请求结果异常</string>
     <string name="waiting">请稍后</string>
     <!--系统相关-->
 

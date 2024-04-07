@@ -199,10 +199,20 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 								throw new Exception("Response is null");
 							}
 							if (response.getCode() == 0) {
-								List<Map<String,Object>> mapList = JSON.parseJson(JSON.toJSONString(response.getData()), new TypeReference<List<Map<String,Object>>>() {});
-								for (Map<String,Object> map : mapList) {
-									list.add(new Entry<String, String>(map.get("url").toString(), map.get("name").toString()));
+								List<Object> mapList = JSON.parseJson(JSON.toJSONString(response.getData()), new TypeReference<List<Object>>() {});
+								if (mapList == null || mapList.size()==0) {
+									Log.i(TAG, "返回列表为空");
+								}else {
+									for (Object map : mapList) {
+										Map<String,Object> map1 = JSON.parseJson(JSON.toJSONString(map), new TypeReference<Map<String,Object>>() {});
+										list.add(new Entry<String, String>(map1.get("url").toString(), map1.get("name").toString()));
+									}
 								}
+
+//								List<Map<String,Object>> mapList = JSON.parseJson(JSON.toJSONString(response.getData()), new TypeReference<List<Map<String,Object>>>() {});
+//								for (Map<String,Object> map : mapList) {
+//									list.add(new Entry<String, String>(map.get("url").toString(), map.get("name").toString()));
+//								}
 								onLoadSucceed(page, list);
 								onStopRefresh();
 							} else {
