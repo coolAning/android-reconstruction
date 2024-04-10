@@ -15,13 +15,14 @@ limitations under the License.*/
 package aning.reconstruction.activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,33 +31,35 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.secneo.sdk.Helper;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import aning.reconstruction.R;
+import aning.reconstruction.application.FPVApplication;
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
-import dji.common.realname.AircraftBindingState;
-import dji.common.realname.AppActivationState;
-import dji.common.useraccount.UserAccountState;
-import dji.common.util.CommonCallbacks;
+import dji.log.DJILog;
 import dji.sdk.base.BaseComponent;
 import dji.sdk.base.BaseProduct;
-import dji.sdk.realname.AppActivationManager;
+import dji.sdk.products.Aircraft;
 import dji.sdk.sdkmanager.DJISDKInitEvent;
 import dji.sdk.sdkmanager.DJISDKManager;
-import dji.sdk.useraccount.UserAccountManager;
 import dji.thirdparty.afinal.core.AsyncTask;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.util.Log;
 
 
-public class DroneActivity extends BaseActivity implements OnBottomDragListener, View.OnClickListener {
-	private static final String TAG = "DroneActivity";
+/** 使用方法：复制>粘贴>改名>改代码 */
+
+/**activity示例
+ * @author Lemon
+ * @warn 复制到其它工程内使用时务必修改import R文件路径为所在应用包名
+ * @use toActivity(DemoActivity.createIntent(...));
+ */
+public class ConnectionActivity extends BaseActivity implements View.OnClickListener {
+	private static final String TAG = "ConnectionActivity";
 
 
 	//启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -71,18 +74,13 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 	 * @return
 	 */
 	public static Intent createIntent(Context context, long userId) {
-		return new Intent(context, DroneActivity.class).putExtra(INTENT_USER_ID, userId);
+		return new Intent(context, ConnectionActivity.class).putExtra(INTENT_USER_ID, userId);
 	}
 
 	//启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 	private long userId = 0;
-
-	//初始化变量文档示例
-	public static final String FLAG_CONNECTION_CHANGE = "dji_sdk_connection_change";
-	private static BaseProduct mProduct;
-	private Handler mHandler;
 
 	private static final String[] REQUIRED_PERMISSION_LIST = new String[]{
 			Manifest.permission.VIBRATE,
@@ -101,16 +99,12 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 	};
 	private List<String> missingPermission = new ArrayList<>();
 	private AtomicBoolean isRegistrationInProgress = new AtomicBoolean(false);
+
 	private static final int REQUEST_PERMISSION_CODE = 12345;
-	//示例结束
-
-
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.drone_activity, this);
+		setContentView(R.layout.connection_activity);
 
 		intent = getIntent();
 		userId = intent.getLongExtra(INTENT_USER_ID, userId);
@@ -121,25 +115,31 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 		initEvent();
 		//功能归类分区方法，必须调用>>>>>>>>>>
 		checkAndRequestPermissions();
+
+		// Register the broadcast receiver for receiving the device connection's changes.
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(FPVApplication.FLAG_CONNECTION_CHANGE);
+		registerReceiver(mReceiver, filter);
 	}
 
 
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-	protected Button loginBtn;
-	protected Button logoutBtn;
-	protected TextView bindingStateTV;
-	protected TextView appActivationStateTV;
+	private TextView mTextConnectionStatus;
+	private TextView mTextProduct;
+	private TextView mVersionTv;
+	private Button mBtnOpen;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
-//		autoSetTitle();//自动设置标题为上个Activity传入的INTENT_TITLE
+		mTextConnectionStatus = (TextView) findViewById(R.id.text_connection_status);
+		mTextProduct = (TextView) findViewById(R.id.text_product_info);
 
-		bindingStateTV = (TextView) findViewById(R.id.tv_binding_state_info);
-		appActivationStateTV = (TextView) findViewById(R.id.tv_activation_state_info);
-		loginBtn = (Button) findViewById(R.id.btn_login);
-		logoutBtn = (Button) findViewById(R.id.btn_logout);
+		mVersionTv = (TextView) findViewById(R.id.textView2);
+		mVersionTv.setText(getResources().getString(R.string.sdk_version, DJISDKManager.getInstance().getSDKVersion()));
 
-
+		mBtnOpen = (Button) findViewById(R.id.btn_open);
+		mBtnOpen.setOnClickListener(this);
+		mBtnOpen.setEnabled(false);
 	}
 
 
@@ -157,28 +157,10 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 
 
 	//Data数据区(存在数据获取或处理代码，但不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	private AppActivationManager appActivationManager;
-	private AppActivationState.AppActivationStateListener activationStateListener;
-	private AircraftBindingState.AircraftBindingStateListener bindingStateListener;
 
 	@Override
 	public void initData() {//必须在onCreate方法内调用
 
-		setUpListener();
-
-		appActivationManager = DJISDKManager.getInstance().getAppActivationManager();
-
-		if (appActivationManager != null) {
-			appActivationManager.addAppActivationStateListener(activationStateListener);
-			appActivationManager.addAircraftBindingStateListener(bindingStateListener);
-			DroneActivity.this.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					appActivationStateTV.setText("" + appActivationManager.getAppActivationState());
-					bindingStateTV.setText("" + appActivationManager.getAircraftBindingState());
-				}
-			});
-		}
 	}
 
 
@@ -196,24 +178,42 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 
 	@Override
 	public void initEvent() {//必须在onCreate方法内调用
-		loginBtn.setOnClickListener(this);
-		logoutBtn.setOnClickListener(this);
+
 	}
 
 
 	//示例代码<<<<<<<<<<<<<<<<<<<
 	@Override
-	public void onDragBottom(boolean rightToLeft) {
-		if (rightToLeft) {
+	public void onClick(View v) {
+		switch (v.getId()) {
 
-//			setContent(userId + 1);
-			return;
+			case R.id.btn_open: {
+				Intent intent = new Intent(this, DroneVideoActivity.class);
+				startActivity(intent);
+				break;
+			}
+			default:
+				break;
 		}
-
-		finish();
 	}
 
 	//示例代码>>>>>>>>>>>>>>>>>>>
+
+
+	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+	//生命周期、onActivityResult>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+	//Event事件区(只要存在事件监听代码就是)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+	/**
+	 * Checks if there is any missing permissions, and
+	 * requests runtime permission if needed.
+	 */
 	private void checkAndRequestPermissions() {
 		// Check for permissions
 		for (String eachPermission : REQUIRED_PERMISSION_LIST) {
@@ -222,16 +222,14 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 			}
 		}
 		// Request for missing permissions
-		if (missingPermission.isEmpty()) {
-			startSDKRegistration();
-		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			showShortToast("Need to grant the permissions!");
+		if (!missingPermission.isEmpty() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			ActivityCompat.requestPermissions(this,
 					missingPermission.toArray(new String[missingPermission.size()]),
 					REQUEST_PERMISSION_CODE);
 		}
 
 	}
+
 	/**
 	 * Result of runtime permission request
 	 */
@@ -255,20 +253,22 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 			showShortToast("Missing permissions!!!");
 		}
 	}
+
 	private void startSDKRegistration() {
 		if (isRegistrationInProgress.compareAndSet(false, true)) {
 			AsyncTask.execute(new Runnable() {
 				@Override
 				public void run() {
 					showShortToast("registering, pls wait...");
-					DJISDKManager.getInstance().registerApp(DroneActivity.this.getApplicationContext(), new DJISDKManager.SDKManagerCallback() {
+					DJISDKManager.getInstance().registerApp(getApplicationContext(), new DJISDKManager.SDKManagerCallback() {
 						@Override
 						public void onRegister(DJIError djiError) {
 							if (djiError == DJISDKError.REGISTRATION_SUCCESS) {
-								showShortToast("register success");
+								DJILog.e("App registration", DJISDKError.REGISTRATION_SUCCESS.getDescription());
 								DJISDKManager.getInstance().startConnectionToProduct();
+								showShortToast("Register Success");
 							} else {
-								showShortToast("register sdk fails, please check the bundle id and network connection!");
+								showShortToast("Register sdk fails, check network is available");
 							}
 							Log.v(TAG, djiError.getDescription());
 						}
@@ -277,21 +277,20 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 						public void onProductDisconnect() {
 							Log.d(TAG, "onProductDisconnect");
 							showShortToast("Product Disconnected");
-							notifyStatusChange();
 
 						}
+
 						@Override
 						public void onProductConnect(BaseProduct baseProduct) {
 							Log.d(TAG, String.format("onProductConnect newProduct:%s", baseProduct));
 							showShortToast("Product Connected");
-							notifyStatusChange();
 
 						}
 
 						@Override
 						public void onProductChanged(BaseProduct baseProduct) {
 							Log.d(TAG, String.format("onProductChanged newProduct:%s", baseProduct));
-							notifyStatusChange();
+							showShortToast("Product Changed");
 						}
 
 						@Override
@@ -304,7 +303,6 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 									@Override
 									public void onConnectivityChange(boolean isConnected) {
 										Log.d(TAG, "onComponentConnectivityChanged: " + isConnected);
-										notifyStatusChange();
 									}
 								});
 							}
@@ -315,6 +313,7 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 											newComponent));
 
 						}
+
 						@Override
 						public void onInitProcess(DJISDKInitEvent djisdkInitEvent, int i) {
 
@@ -329,133 +328,46 @@ public class DroneActivity extends BaseActivity implements OnBottomDragListener,
 			});
 		}
 	}
-	private void notifyStatusChange() {
-		mHandler.removeCallbacks(updateRunnable);
-		mHandler.postDelayed(updateRunnable, 500);
-	}
 
-	private Runnable updateRunnable = new Runnable() {
+	protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 		@Override
-		public void run() {
-			Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
-			sendBroadcast(intent);
+		public void onReceive(Context context, Intent intent) {
+			refreshSDKRelativeUI();
 		}
 	};
 
-
-
-	//生命周期、onActivityResult<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-	//生命周期、onActivityResult>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-	//Event事件区(只要存在事件监听代码就是)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-	private void loginAccount(){
-
-		UserAccountManager.getInstance().logIntoDJIUserAccount(this,
-				new CommonCallbacks.CompletionCallbackWith<UserAccountState>() {
-					@Override
-					public void onSuccess(final UserAccountState userAccountState) {
-						showShortToast("Login Success");
-					}
-					@Override
-					public void onFailure(DJIError error) {
-						showShortToast("Login Error:"
-								+ error.getDescription());
-					}
-				});
-
-	}
-
-	private void logoutAccount(){
-		UserAccountManager.getInstance().logoutOfDJIUserAccount(new CommonCallbacks.CompletionCallback() {
-			@Override
-			public void onResult(DJIError error) {
-				if (null == error) {
-					showShortToast("Logout Success");
-				} else {
-					showShortToast("Logout Error:"
-							+ error.getDescription());
-				}
-			}
-		});
-	}
-
 	@Override
-	public void onClick(View v) {
-
-		switch (v.getId()) {
-			case R.id.btn_login:{
-				loginAccount();
-				break;
-			}
-			case R.id.btn_logout:{
-				logoutAccount();
-				break;
-			}
-			default:
-				break;
-		}
+	protected void onDestroy() {
+		Log.e(TAG, "onDestroy");
+		unregisterReceiver(mReceiver);
+		super.onDestroy();
 	}
 
-	private void setUpListener() {
-		// Example of Listener
-		activationStateListener = new AppActivationState.AppActivationStateListener() {
-			@Override
-			public void onUpdate(final AppActivationState appActivationState) {
-				DroneActivity.this.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						appActivationStateTV.setText("" + appActivationState);
-					}
-				});
+	private void refreshSDKRelativeUI() {
+		BaseProduct mProduct = FPVApplication.getProductInstance();
+
+		if (null != mProduct && mProduct.isConnected()) {
+			Log.v(TAG, "refreshSDK: True");
+			mBtnOpen.setEnabled(true);
+
+			String str = mProduct instanceof Aircraft ? "DJIAircraft" : "DJIHandHeld";
+			mTextConnectionStatus.setText("Status: " + str + " connected");
+
+			if (null != mProduct.getModel()) {
+				mTextProduct.setText("" + mProduct.getModel().getDisplayName());
+			} else {
+				mTextProduct.setText(R.string.product_information);
 			}
-		};
 
-		bindingStateListener = new AircraftBindingState.AircraftBindingStateListener() {
+		} else {
+			Log.v(TAG, "refreshSDK: False");
+			mBtnOpen.setEnabled(false);
 
-			@Override
-			public void onUpdate(final AircraftBindingState bindingState) {
-				DroneActivity.this.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						bindingStateTV.setText("" + bindingState);
-					}
-				});
-			}
-		};
-	}
-
-	private void tearDownListener() {
-		if (activationStateListener != null) {
-			appActivationManager.removeAppActivationStateListener(activationStateListener);
-			DroneActivity.this.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					appActivationStateTV.setText("Unknown");
-				}
-			});
-		}
-		if (bindingStateListener !=null) {
-			appActivationManager.removeAircraftBindingStateListener(bindingStateListener);
-			DroneActivity.this.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					bindingStateTV.setText("Unknown");
-				}
-			});
+			mTextProduct.setText(R.string.product_information);
+			mTextConnectionStatus.setText(R.string.connection_loose);
 		}
 	}
-
-
-
-
-
-
 
 	//内部类,尽量少用<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

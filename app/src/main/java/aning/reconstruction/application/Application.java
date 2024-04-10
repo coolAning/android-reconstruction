@@ -1,6 +1,5 @@
 package aning.reconstruction.application;
 
-import aning.reconstruction.activity.DroneActivity;
 import aning.reconstruction.manager.DataManager;
 import aning.reconstruction.model.User;
 import zuo.biao.library.base.BaseApplication;
@@ -23,17 +22,22 @@ public class Application extends BaseApplication {
 	public void onCreate() {
 		super.onCreate();
 		context = this;
-
+		fpvApplication.onCreate();
 	}
 
 	/**
 	 * 不知道干啥的方法 大疆文档说要加
 	 * @param paramContext
 	 */
+	private FPVApplication fpvApplication;
 	@Override
 	protected void attachBaseContext(Context paramContext) {
 		super.attachBaseContext(paramContext);
 		Helper.install(Application.this);
+		if (fpvApplication == null) {
+			fpvApplication = new FPVApplication();
+			fpvApplication.setContext(this);
+		}
 	}
 	
 	/**获取当前用户id

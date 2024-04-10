@@ -47,8 +47,7 @@
     <!--系统相关-->
 
 <!--    无人机相关-->
-    <string name="app_name">ActivationDemo</string>
-    <string name="title_activity_connection">ConnectionActivity</string>
+    <string name="app_name">三维重建系统</string>
     <string name="action_settings">Settings</string>
     <string name="disconnected">Disconnected</string>
     <string name="product_information">Product Information</string>

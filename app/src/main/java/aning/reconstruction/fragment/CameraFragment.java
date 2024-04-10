@@ -21,21 +21,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
-import aning.reconstruction.activity.DroneActivity;
+import aning.reconstruction.activity.ConnectionActivity;
 import aning.reconstruction.activity.UploadActivity;
-import aning.reconstruction.activity.UserActivity;
 import zuo.biao.library.base.BaseFragment;
-import zuo.biao.library.model.Entry;
 
 
 /**
@@ -158,7 +149,7 @@ public class CameraFragment extends BaseFragment {
 		btnDrone.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				toActivity(DroneActivity.createIntent(context, userId));
+				toActivity(ConnectionActivity.createIntent(context, userId));
 			}
 		});
 	}
