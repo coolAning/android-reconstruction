@@ -20,15 +20,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/alpha_1">
+
+
         <TextView
             style="@style/topbar_title"
             android:layout_width="231dp"
             android:layout_height="65dp"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
             android:text="@string/reconstruction"
             android:textSize="30sp" />
-
 
         <LinearLayout
             android:layout_width="match_parent"

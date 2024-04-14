@@ -25,10 +25,6 @@ public class Application extends BaseApplication {
 		fpvApplication.onCreate();
 	}
 
-	/**
-	 * 不知道干啥的方法 大疆文档说要加
-	 * @param paramContext
-	 */
 	private FPVApplication fpvApplication;
 	@Override
 	protected void attachBaseContext(Context paramContext) {

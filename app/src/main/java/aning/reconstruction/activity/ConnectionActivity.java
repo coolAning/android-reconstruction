@@ -50,14 +50,6 @@ import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.util.Log;
 
-
-/** 使用方法：复制>粘贴>改名>改代码 */
-
-/**activity示例
- * @author Lemon
- * @warn 复制到其它工程内使用时务必修改import R文件路径为所在应用包名
- * @use toActivity(DemoActivity.createIntent(...));
- */
 public class ConnectionActivity extends BaseActivity implements View.OnClickListener {
 	private static final String TAG = "ConnectionActivity";
 
@@ -138,7 +130,7 @@ public class ConnectionActivity extends BaseActivity implements View.OnClickList
 		mVersionTv.setText(getResources().getString(R.string.sdk_version, DJISDKManager.getInstance().getSDKVersion()));
 
 		mBtnOpen = (Button) findViewById(R.id.btn_open);
-		mBtnOpen.setOnClickListener(this);
+
 		mBtnOpen.setEnabled(false);
 	}
 
@@ -178,7 +170,7 @@ public class ConnectionActivity extends BaseActivity implements View.OnClickList
 
 	@Override
 	public void initEvent() {//必须在onCreate方法内调用
-
+		mBtnOpen.setOnClickListener(this);
 	}
 
 
@@ -188,7 +180,7 @@ public class ConnectionActivity extends BaseActivity implements View.OnClickList
 		switch (v.getId()) {
 
 			case R.id.btn_open: {
-				Intent intent = new Intent(this, DroneVideoActivity.class);
+				Intent intent = new Intent(this, DroneActivity.class);
 				startActivity(intent);
 				break;
 			}

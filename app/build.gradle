@@ -51,12 +51,12 @@ dependencies {
     implementation project(path: ':ZBLibrary')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    implementation('com.dji:dji-sdk:4.15', {
+    implementation('com.dji:dji-sdk:4.17', {
 
         exclude module: 'library-anti-distortion'
 
     })
-    compileOnly 'com.dji:dji-sdk-provided:4.15'
+    compileOnly 'com.dji:dji-sdk-provided:4.17'
     implementation "androidx.lifecycle:lifecycle-runtime:2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"

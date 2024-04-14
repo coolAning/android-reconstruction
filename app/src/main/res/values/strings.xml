@@ -53,6 +53,9 @@
     <string name="product_information">Product Information</string>
     <string name="connection_loose">Status: No Product Connected</string>
     <string name="sdk_version">DJI SDK Version: %1$s</string>
+    <string name="start_upload">开始上传</string>
+    <string name="stop_upload">停止上传</string>
+    <string name="parameter_settings">参数设置</string>
     <!--    无人机相关-->
 
 </resources>

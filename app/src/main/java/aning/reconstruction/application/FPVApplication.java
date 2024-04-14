@@ -56,11 +56,12 @@ public class FPVApplication extends android.app.Application {
     public static synchronized Camera getCameraInstance() {
         if (getProductInstance() == null) return null;
         Camera camera = null;
-        if (getProductInstance() instanceof Aircraft){
-            camera = ((Aircraft) getProductInstance()).getCamera();
-        } else if (getProductInstance() instanceof HandHeld) {
-            camera = ((HandHeld) getProductInstance()).getCamera();
-        }
+        camera = ((Aircraft) getProductInstance()).getCamera();
+//        if (getProductInstance() instanceof Aircraft){
+//            camera = ((Aircraft) getProductInstance()).getCamera();
+//        } else if (getProductInstance() instanceof HandHeld) {
+//            camera = ((HandHeld) getProductInstance()).getCamera();
+//        }
         return camera;
     }
 

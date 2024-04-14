@@ -142,7 +142,7 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name="aning.reconstruction.activity.DroneVideoActivity"
+            android:name="aning.reconstruction.activity.DroneActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
