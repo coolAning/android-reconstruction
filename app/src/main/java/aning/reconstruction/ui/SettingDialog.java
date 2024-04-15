@@ -46,8 +46,7 @@ public class SettingDialog extends Dialog implements View.OnClickListener {
 
 	private Context context;
 	private String title = "参数设置";
-	private String strPositive;
-	private String strNegative;
+
 	private boolean showNegativeButton = true;
 	private int requestCode;
 	private OnDialogButtonClickListener listener;
@@ -60,6 +59,7 @@ public class SettingDialog extends Dialog implements View.OnClickListener {
 		super(context, R.style.MyDialog);
 		this.context = context;
 		this.requestCode = requestCode;
+		this.listener = listener;
 	}
 
 	private TextView tvTitle;
@@ -73,24 +73,19 @@ public class SettingDialog extends Dialog implements View.OnClickListener {
 		setContentView(R.layout.setting_dialog);
 		setCanceledOnTouchOutside(true);
 
-		tvTitle = findViewById(R.id.tvAlertDialogTitle);
-		btnPositive = findViewById(R.id.btnAlertDialogPositive);
-		btnNegative = findViewById(R.id.btnAlertDialogNegative);
+		tvTitle = findViewById(R.id.tvSettingDialogTitle);
+		btnPositive = findViewById(R.id.btnSettingDialogPositive);
+		btnNegative = findViewById(R.id.btnSettingDialogNegative);
 		tvName = findViewById(R.id.video_name_et);
 		tvTrainSteps = findViewById(R.id.train_steps_et);
 
 		tvTitle.setVisibility(StringUtil.isNotEmpty(title, true) ? View.VISIBLE : View.GONE);
 		tvTitle.setText("" + StringUtil.getCurrentString());
 
-		if (StringUtil.isNotEmpty(strPositive, true)) {
-			btnPositive.setText(StringUtil.getCurrentString());
-		}
+
 		btnPositive.setOnClickListener(this);
 
 		if (showNegativeButton) {
-			if (StringUtil.isNotEmpty(strNegative, true)) {
-				btnNegative.setText(StringUtil.getCurrentString());
-			}
 			btnNegative.setOnClickListener(this);
 		} else {
 			btnNegative.setVisibility(View.GONE);
@@ -119,9 +114,9 @@ public class SettingDialog extends Dialog implements View.OnClickListener {
 		}
 		int trainStepsInt = Integer.parseInt(trainSteps);
 
-		if (v.getId() == R.id.btnAlertDialogPositive) {
+		if (v.getId() == R.id.btnSettingDialogPositive) {
 			listener.onDialogButtonClick(requestCode, true,name,trainStepsInt);
-		} else if (v.getId() == R.id.btnAlertDialogNegative) {
+		} else if (v.getId() == R.id.btnSettingDialogNegative) {
 			listener.onDialogButtonClick(requestCode, false,name,trainStepsInt);
 		}
 

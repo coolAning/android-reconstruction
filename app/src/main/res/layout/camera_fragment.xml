@@ -17,24 +17,18 @@
         android:id="@+id/btnFile"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_above="@id/btnConnectCamera"
+        android:layout_below="@+id/tvSelectVideoSource"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp"
+        android:layout_marginBottom="10dp"
         android:text="打开相册" />
-
-    <Button
-        android:id="@+id/btnConnectCamera"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="打开相机" />
 
     <Button
         android:id="@+id/btnConnectDrone"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="连接无人机"
-        android:layout_below="@id/btnConnectCamera"
+        android:layout_below="@id/btnFile"
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"/>
 

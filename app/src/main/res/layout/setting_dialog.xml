@@ -13,7 +13,7 @@
         android:paddingBottom="@dimen/item_distance" >
 
         <TextView
-            android:id="@+id/tvAlertDialogTitle"
+            android:id="@+id/tvSettingDialogTitle"
             style="@style/text_huge_black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
     <LinearLayout style="@style/ll_horizontal_match_wrap" >
 
         <Button
-            android:id="@+id/btnAlertDialogNegative"
+            android:id="@+id/btnSettingDialogNegative"
             style="@style/text_middle"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -59,7 +59,7 @@
         <View style="@style/divider_vertical_1px" />
 
         <Button
-            android:id="@+id/btnAlertDialogPositive"
+            android:id="@+id/btnSettingDialogPositive"
             style="@style/text_middle_black"
             android:layout_width="0dp"
             android:layout_weight="1"

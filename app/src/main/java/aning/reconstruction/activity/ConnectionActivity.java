@@ -88,6 +88,7 @@ public class ConnectionActivity extends BaseActivity implements View.OnClickList
 			Manifest.permission.BLUETOOTH_ADMIN,
 			Manifest.permission.READ_EXTERNAL_STORAGE,
 			Manifest.permission.READ_PHONE_STATE,
+			Manifest.permission.RECORD_AUDIO
 	};
 	private List<String> missingPermission = new ArrayList<>();
 	private AtomicBoolean isRegistrationInProgress = new AtomicBoolean(false);
@@ -180,7 +181,7 @@ public class ConnectionActivity extends BaseActivity implements View.OnClickList
 		switch (v.getId()) {
 
 			case R.id.btn_open: {
-				Intent intent = new Intent(this, DroneActivity.class);
+				Intent intent = DroneActivity.createIntent(this, userId);
 				startActivity(intent);
 				break;
 			}

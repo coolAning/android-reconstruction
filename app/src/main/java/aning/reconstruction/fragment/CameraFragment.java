@@ -93,13 +93,11 @@ public class CameraFragment extends BaseFragment {
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	private Button btnFile;
-	private Button btnCamera;
 	private Button btnDrone;
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
 
 		btnFile = findView(R.id.btnFile);
-		btnCamera = findView(R.id.btnConnectCamera);
 		btnDrone = findView(R.id.btnConnectDrone);
 
 	}

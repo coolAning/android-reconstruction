@@ -14,6 +14,8 @@ limitations under the License.*/
 
 package aning.reconstruction.activity;
 
+import static zuo.biao.library.util.JSON.parseObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.SurfaceTexture;
@@ -31,7 +33,9 @@ import java.util.function.ToDoubleBiFunction;
 
 import aning.reconstruction.R;
 import aning.reconstruction.application.FPVApplication;
+import aning.reconstruction.model.Response;
 import aning.reconstruction.ui.SettingDialog;
+import aning.reconstruction.util.HttpRequest;
 import dji.common.camera.SettingsDefinitions;
 import dji.common.camera.SystemState;
 import dji.common.error.DJIError;
@@ -46,9 +50,11 @@ import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.StringUtil;
 
 
-public class DroneActivity extends BaseActivity implements TextureView.SurfaceTextureListener, View.OnClickListener, SettingDialog.OnDialogButtonClickListener {
+public class DroneActivity extends BaseActivity implements TextureView.SurfaceTextureListener, View.OnClickListener {
 	private static final String TAG = "DroneActivity";
 
 
@@ -58,9 +64,10 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 	public static final String RESULT_CLICKED_ITEM = "RESULT_CLICKED_ITEM";
 
 	//后端rtmp地址url
-	private static final String baseLiveShowUrl = "rtmp://118.202.10.58:1935/live";
+	private static final String baseLiveShowUrl = "rtmp://118.202.10.58:6666/live";
 
 	private String liveShowUrl = baseLiveShowUrl + "/";
+	private String name = "";
 	private int trainSteps = 0;
 
 	/**启动这个Activity的Intent
@@ -203,48 +210,7 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 
 	@Override
 	public void initEvent() {
-
-		Camera camera = FPVApplication.getCameraInstance();
-
-		if (camera != null) {
-
-			camera.setSystemStateCallback(new SystemState.Callback() {
-				@Override
-				public void onUpdate(SystemState cameraSystemState) {
-					if (null != cameraSystemState) {
-
-						int recordTime = cameraSystemState.getCurrentVideoRecordingTimeInSeconds();
-						int minutes = (recordTime % 3600) / 60;
-						int seconds = recordTime % 60;
-
-						final String timeString = String.format("%02d:%02d", minutes, seconds);
-						final boolean isVideoRecording = cameraSystemState.isRecording();
-
-						DroneActivity.this.runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-
-								recordingTime.setText(timeString);
-
-								/*
-								 * Update recordingTime TextView visibility and mRecordBtn's check state
-								 */
-								if (isVideoRecording){
-									recordingTime.setVisibility(View.VISIBLE);
-								}else
-								{
-									recordingTime.setVisibility(View.INVISIBLE);
-								}
-							}
-						});
-					}
-				}
-			});
-
-		}
-
-
+		settingBtn.setOnClickListener(this);
 		if (null != mVideoSurface) {
 			mVideoSurface.setSurfaceTextureListener(this);
 		}
@@ -278,9 +244,18 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 
 		switch (v.getId()) {
 			case R.id.parameter_setting_btn:
-				//TODO 参数设置 设置名字 训练步数
-
-
+				new SettingDialog(this, 1, new SettingDialog.OnDialogButtonClickListener() {
+					@Override
+					public void onDialogButtonClick(int requestCode, boolean isPositive, String filename, int trainStep) {
+						if (isPositive) {
+							name=filename;
+							trainSteps = trainStep;
+							recordBtn.setClickable(true);
+							liveShowUrl = liveShowUrl + String.valueOf(userId)+"_" + name;
+							Log.i(TAG, "liveshowurl: " + liveShowUrl);
+						}
+					}
+				}).show();
 				break;
 			default:
 				break;
@@ -300,16 +275,45 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 		new Thread() {
 			@Override
 			public void run() {
+				showShortToast(liveShowUrl);
 				DJISDKManager.getInstance().getLiveStreamManager().setLiveUrl(liveShowUrl);
 				int result = DJISDKManager.getInstance().getLiveStreamManager().startStream();
 				DJISDKManager.getInstance().getLiveStreamManager().setStartTime();
 
-				showShortToast("startLive:" + result +
-						"\n isVideoStreamSpeedConfigurable:" + DJISDKManager.getInstance().getLiveStreamManager().isVideoStreamSpeedConfigurable() +
-						"\n isLiveAudioEnabled:" + DJISDKManager.getInstance().getLiveStreamManager().isLiveAudioEnabled());
+//				showShortToast("startLive:" + result +
+//						"\n isVideoStreamSpeedConfigurable:" + DJISDKManager.getInstance().getLiveStreamManager().isVideoStreamSpeedConfigurable() +
+//						"\n isLiveAudioEnabled:" + DJISDKManager.getInstance().getLiveStreamManager().isLiveAudioEnabled());
 			}
 		}.start();
-
+		// 启动计时器
+		recordTime = 0;
+		final int requestCodeSetDrone = 2;
+		recordHandler.post(recordRunnable);
+		// 请求后端取流
+		HttpRequest.setDroneVideo(name,trainSteps,requestCodeSetDrone,new OnHttpResponseListener() {
+			@Override
+			public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+				if (e != null) {
+					showShortToast(R.string.upload_faild);
+				}else {
+					if (requestCode == requestCodeSetDrone) {
+						try {
+							Response response = parseObject(resultJson, Response.class);
+							if (response == null) {
+								throw new Exception("Response is null");
+							}
+							if (response.getCode() == 0) {
+								showShortToast(R.string.drone_video_uploading);
+							} else {
+								showShortToast(response.getMsg());
+							}
+						} catch (Exception error) {
+							showShortToast(R.string.sys_error);
+						}
+					}
+				}
+			}
+		});
 	}
 
 	// Method for stopping recording
@@ -319,9 +323,25 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 		}
 		DJISDKManager.getInstance().getLiveStreamManager().stopStream();
 		showShortToast("Stop Live Show");
+		// 停止计时器
+		recordHandler.removeCallbacks(recordRunnable);
+		recordingTime.setVisibility(View.INVISIBLE);
 	}
 
-
+	private int recordTime = 0; // 记录录制时间的变量
+	private Handler recordHandler = new Handler(); // 用于更新 UI 的 Handler
+	private Runnable recordRunnable = new Runnable() { // 每秒更新 recordTime 并更新 UI 的 Runnable
+		@Override
+		public void run() {
+			recordTime++;
+			int minutes = (recordTime % 3600) / 60;
+			int seconds = recordTime % 60;
+			final String timeString = String.format("%02d:%02d", minutes, seconds);
+			recordingTime.setVisibility(View.VISIBLE);
+			recordingTime.setText(timeString);
+			recordHandler.postDelayed(this, 1000);
+		}
+	};
 	protected void onProductChange() {
 		initPreviewer();
 		loginAccount();
@@ -427,17 +447,7 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 
 
 
-	@Override
-	public void onDialogButtonClick(int requestCode, boolean isPositive, String name, int trainSteps) {
-		if (isPositive) {
 
-			//TODO 参数设置
-			liveShowUrl = liveShowUrl + name;
-			trainSteps = trainSteps;
-
-		}
-
-	}
 
 	//内部类,尽量少用>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

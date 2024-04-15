@@ -64,6 +64,7 @@ public class HttpRequest {
     public static final String TRAIN_STEPS = "n_steps";
     public static final String VIDEO_NAME = "video_name";
     public static final String FILENAME = "filename";
+    public static final String NAME = "name";
     public static final String VIDEO_NAME_List = "video_name_list";
 
     //account<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -175,6 +176,15 @@ public class HttpRequest {
     }
 
 
+    /**
+     * 渲染图片
+     * @param origin
+     * @param videoName
+     * @param translation
+     * @param rotationList
+     * @param requestCode
+     * @param listener
+     */
     public static void render(Boolean origin, String videoName,List<Object> translation, List<Integer> rotationList, final int requestCode, final OnHttpResponseListener listener) {
         Map<String, Object> request = new HashMap<>();
         String name = Application.getInstance().getCurrentUserId() + "_" + videoName;
@@ -185,6 +195,19 @@ public class HttpRequest {
 
         HttpManager.getInstance().post(request, URL_BASE + "/render/photo", true,requestCode, listener);
     }
+
+
+    public static void setDroneVideo(String name,int trainSteps, final int requestCode, final OnHttpResponseListener listener) {
+        Map<String, Object> request = new HashMap<>();
+        request.put(NAME, name);
+        request.put(TRAIN_STEPS, trainSteps);
+        request.put(USER_ID, Application.getInstance().getCurrentUserId());
+
+        HttpManager.getInstance().post(request, URL_BASE + "/camera/setDroneVideo", true,requestCode, listener);
+    }
+
+
+
 
     public static final int USER_LIST_RANGE_ALL = 0;
     public static final int USER_LIST_RANGE_RECOMMEND = 1;
