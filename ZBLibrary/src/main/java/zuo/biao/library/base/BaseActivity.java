@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -38,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -127,17 +130,7 @@ public abstract class BaseActivity extends FragmentActivity implements ActivityP
 	public void setContentView(int layoutResID) {
 		super.setContentView(layoutResID);
 
-		// 状态栏沉浸，4.4+生效 <<<<<<<<<<<<<<<<<
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			getWindow().setFlags(
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-			);
-		}
-		SystemBarTintManager tintManager = new SystemBarTintManager(this);
-		tintManager.setStatusBarTintEnabled(true);
-		tintManager.setStatusBarTintResource(R.color.topbar_bg);//状态背景色，可传drawable资源
-		// 状态栏沉浸，4.4+生效 >>>>>>>>>>>>>>>>>
+		setStatusBarColor(R.color.divider);
 
 		tvBaseTitle = findView(R.id.tvBaseTitle);//绑定默认标题TextView
 	}
@@ -686,6 +679,17 @@ public abstract class BaseActivity extends FragmentActivity implements ActivityP
 	}
 
 	//底部滑动实现同点击标题栏左右按钮效果>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+	/**
+	 * 设置状态栏颜色
+	 * @param colorResId 颜色资源 ID
+	 */
+	protected void setStatusBarColor(@ColorRes int colorResId) {
+		Window window = getWindow();
+		window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			window.setStatusBarColor(ContextCompat.getColor(this, colorResId));
+		}
+	}
 
 }

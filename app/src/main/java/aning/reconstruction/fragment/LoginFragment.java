@@ -23,8 +23,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Map;
 
@@ -107,8 +108,8 @@ public class LoginFragment extends BaseFragment {
 	private Button btLogin;
 	private ImageButton ibRegister;
 	private ImageButton ibForgetPassword;
-	private EditText account;
-	private EditText password;
+	private TextInputEditText account;
+	private TextInputEditText password;
 	@Override
 	public void initView() {//必须在onCreateView方法内调用
 

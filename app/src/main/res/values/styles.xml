@@ -15,7 +15,7 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="Theme.Material3.Light">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
@@ -90,5 +90,15 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+<!--    topbar主题-->
+    <style name="topbar_customize">
+        <item name="android:background">@color/colorLogin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/topbar_height</item>
+    </style>
+
+
 
 </resources>

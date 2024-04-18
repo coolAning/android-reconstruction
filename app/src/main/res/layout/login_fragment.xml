@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/activity_page">
 
 <!--    <RelativeLayout style="@style/topbar_bg">-->
@@ -19,7 +20,7 @@
         style="@style/activity_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/alpha_1">
+        android:background="@drawable/login_background">
 
 
         <TextView
@@ -30,41 +31,65 @@
             android:text="@string/reconstruction"
             android:textSize="30sp" />
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:padding="10dp">
+            app:cardBackgroundColor="@color/colorInputField"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
 
-            <EditText
-                android:id="@+id/username"
-                style="@style/edit_item_right_et_padding"
-                android:layout_margin="10dp"
-                android:autofillHints="username"
-                android:background="@color/gray_interest"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/password"
-                style="@style/edit_item_right_et_padding"
-                android:layout_margin="10dp"
-                android:autofillHints="password"
-                android:background="@color/gray_interest"
-                android:hint="@string/password"
-                android:inputType="textPassword" />
-
-
-            <Button
-                android:id="@+id/login"
-                android:layout_width="300dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="80dp"
-                android:text="@string/login" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+
+                    style="@style/match_wrap"
+                    android:layout_margin="10dp"
+                    android:hint="@string/username"
+                    app:cornerFamily="rounded"
+                    app:cornerSize="16dp"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/account">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/username"
+                        style="@style/match_wrap"
+                        android:inputType="textEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/match_wrap"
+                    android:layout_margin="10dp"
+                    android:hint="@string/password"
+                    app:endIconMode="password_toggle"
+                    app:startIconDrawable="@drawable/password">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        style="@style/match_wrap"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/login"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="80dp"
+                    android:text="@string/login" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <LinearLayout
             android:layout_width="match_parent"

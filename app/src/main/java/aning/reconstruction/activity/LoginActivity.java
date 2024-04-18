@@ -20,10 +20,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import aning.reconstruction.DEMO.DemoFragment;
@@ -34,6 +37,7 @@ import aning.reconstruction.fragment.RetrievePasswordFragment;
 import aning.reconstruction.interfaces.OnDataPassListener;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.manager.SystemBarTintManager;
 
 
 /**
@@ -84,6 +88,9 @@ public class LoginActivity extends BaseActivity implements OnBottomDragListener 
 	private LoginFragment loginFragment;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
+
+		this.setStatusBarColor(R.color.colorLogin);
+
 //		autoSetTitle();//自动设置标题为上个Activity传入的INTENT_TITLE
 		loginFragment = LoginFragment.createInstance(getIntent().getLongExtra(INTENT_USER_ID, 0));
 		fragmentManager
@@ -92,6 +99,7 @@ public class LoginActivity extends BaseActivity implements OnBottomDragListener 
 				.addToBackStack("loginFragment")
 				.show(loginFragment)
 				.commit();
+
 	}
 
 

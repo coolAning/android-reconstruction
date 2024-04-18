@@ -5,6 +5,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-
-
+    <color name="colorLogin">#7497C7</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorInputField">#B3E0E0E0</color>
 </resources>

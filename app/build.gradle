@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 34
     buildToolsVersion "34.0.0"
     defaultConfig {
         applicationId "aning.reconstruction"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -51,13 +51,15 @@ dependencies {
     implementation project(path: ':ZBLibrary')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    implementation('com.dji:dji-sdk:4.17', {
-
-        exclude module: 'library-anti-distortion'
-
-    })
+//    implementation('com.dji:dji-sdk:4.17', {
+//
+//        exclude module: 'library-anti-distortion'
+//
+//    })
     // DJI provided SDK
-    compileOnly 'com.dji:dji-sdk-provided:4.17'
+//    compileOnly 'com.dji:dji-sdk-provided:4.17'
+    implementation 'com.dji:dji-sdk-alpha:4.17-a1'
+    compileOnly 'com.dji:dji-sdk-provided-alpha:4.17-a1'
     implementation "androidx.lifecycle:lifecycle-runtime:2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"
