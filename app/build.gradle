@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion "34.0.0"
     defaultConfig {
         applicationId "aning.reconstruction"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -63,5 +63,5 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"
     // DJI provided SDK end
 
-//    implementation 'com.google.android.material:material:1.12.0-rc01'
+    implementation 'com.google.android.material:material:1.12.0-rc01'
 }
