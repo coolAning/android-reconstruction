@@ -1,69 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/activity_page">
-
-<!--    <RelativeLayout style="@style/topbar_bg">-->
-
-<!--        <ImageButton-->
-<!--            style="@style/topbar_return_img"-->
-<!--            android:contentDescription="@string/exit" />-->
-
-<!--        <TextView-->
-<!--            style="@style/topbar_title"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:text="@string/register" />-->
-
-<!--    </RelativeLayout>-->
 
     <RelativeLayout
         style="@style/activity_page"
-        android:background="@color/alpha_1">
-
+        android:background="@drawable/login_background">
 
         <LinearLayout
             style="@style/ll_vertical_match_wrap"
             android:layout_centerInParent="true"
+            android:background="@color/colorDarkBackground"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="16dp">
 
-            <EditText
-                android:id="@+id/account"
-                style="@style/edit_item_right_et_padding"
-                android:background="@color/gray_interest"
-                android:hint="@string/email"
-                android:autofillHints="username"
-                android:layout_margin="10dp"
-                android:inputType="textEmailAddress" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="@color/colorInputField"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
 
-            <EditText
-                android:id="@+id/password"
-                style="@style/edit_item_right_et_padding"
-                android:background="@color/gray_interest"
-                android:hint="@string/password"
-                android:autofillHints="password"
-                android:layout_margin="10dp"
-                android:inputType="textPassword" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <EditText
-                android:id="@+id/passwordAgain"
-                style="@style/edit_item_right_et_padding"
-                android:layout_margin="10dp"
-                android:autofillHints="password"
-                android:background="@color/gray_interest"
-                android:hint="@string/re_password"
-                android:inputType="textPassword" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/match_wrap"
+                        android:layout_margin="10dp"
+                        android:hint="@string/email"
+                        app:cornerFamily="rounded"
+                        app:cornerSize="16dp"
+                        app:endIconMode="clear_text"
+                        app:startIconDrawable="@drawable/account">
 
-            <Button
-                android:id="@+id/register"
-                style="@style/btn_middle"
-                android:textColor="@color/white"
-                android:layout_width="200dp"
-                android:layout_marginTop="80dp"
-                android:text="@string/register" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/account"
+                            style="@style/match_wrap"
+                            android:inputType="textEmailAddress" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/match_wrap"
+                        android:layout_margin="10dp"
+                        android:hint="@string/password"
+                        app:cornerFamily="rounded"
+                        app:cornerSize="16dp"
+                        app:endIconMode="password_toggle"
+                        app:startIconDrawable="@drawable/password">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/password"
+                            style="@style/match_wrap"
+                            android:inputType="textPassword" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/match_wrap"
+                        android:layout_margin="10dp"
+                        android:hint="@string/re_password"
+                        app:cornerFamily="rounded"
+                        app:cornerSize="16dp"
+                        app:endIconMode="password_toggle"
+                        app:startIconDrawable="@drawable/password">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/passwordAgain"
+                            style="@style/match_wrap"
+                            android:inputType="textPassword" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                app:cardBackgroundColor="#20FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/register"
+                    style="@style/btn_middle"
+                    android:layout_width="200dp"
+                    android:text="@string/register"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </LinearLayout>

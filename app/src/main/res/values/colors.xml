@@ -9,4 +9,5 @@
     <color name="colorTransparent">#00000000</color>
     <color name="colorInputField">#B3E0E0E0</color>
     <color name="colorHalfTrans">#20FFFFFF</color>
+    <color name="colorDarkBackground">#20121212</color>
 </resources>

@@ -92,7 +92,6 @@ public class RegisterFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        //TODO demo_fragment改为你所需要的layout文件
         setContentView(R.layout.register_fragment);
 
         argument = getArguments();
