@@ -106,8 +106,8 @@ public class LoginFragment extends BaseFragment {
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	private Button btLogin;
-	private ImageButton ibRegister;
-	private ImageButton ibForgetPassword;
+	private Button ibRegister;
+	private Button ibForgetPassword;
 	private TextInputEditText account;
 	private TextInputEditText password;
 	@Override
