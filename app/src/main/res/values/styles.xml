@@ -98,7 +98,25 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/topbar_height</item>
     </style>
-
-
+<!--bootom_app_bar定制-->
+    <style name="bootom_app_bar_custom" parent="Widget.AppCompat.Toolbar">
+        <item name="enforceMaterialTheme">true</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="fabCradleMargin">@dimen/mtrl_bottomappbar_fab_cradle_margin</item>
+        <item name="fabCradleRoundedCornerRadius">
+            @dimen/mtrl_bottomappbar_fab_cradle_rounded_corner_radius
+        </item>
+        <item name="fabCradleVerticalOffset">@dimen/mtrl_bottomappbar_fab_cradle_vertical_offset</item>
+        <item name="android:minHeight">@dimen/mtrl_bottomappbar_height</item>
+        <item name="maxButtonHeight">@dimen/mtrl_bottomappbar_height</item>
+        <item name="elevation">8dp</item>
+        <item name="paddingBottomSystemWindowInsets">true</item>
+        <item name="paddingLeftSystemWindowInsets">true</item>
+        <item name="paddingRightSystemWindowInsets">true</item>
+        <item name="fabAnchorMode">cradle</item>
+        <item name="fabAlignmentMode">center</item>
+        <item name="menuAlignmentMode">auto</item>
+        <item name="addElevationShadow">true</item>
+    </style>
 
 </resources>
