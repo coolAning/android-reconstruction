@@ -4,8 +4,7 @@
 
     <RelativeLayout
         android:id="@+id/rlBottomTabTopbar"
-        style="@style/topbar_customize"
-        android:background="@color/colorMain">
+        style="@style/topbar_customize" >
 
         <TextView
             android:id="@+id/delete_tv"
@@ -49,7 +48,6 @@
     <FrameLayout
         android:id="@+id/flMainTabFragmentContainer"
         style="@style/match_match"
-        android:background="@drawable/main_tab_background"
         android:layout_weight="1" >
     </FrameLayout>
 

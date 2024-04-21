@@ -17,30 +17,19 @@ package aning.reconstruction.fragment;
 import static zuo.biao.library.util.JSON.parseObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
-import aning.reconstruction.activity.MainTabActivity;
-import aning.reconstruction.activity.UserActivity;
 import aning.reconstruction.interfaces.OnDataPassListener;
 import aning.reconstruction.model.Response;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.model.Entry;
 
 
 /**

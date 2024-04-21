@@ -23,14 +23,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Map;
 
 import aning.reconstruction.R;
-import aning.reconstruction.activity.MainTabActivity;
+import aning.reconstruction.activity.MainActivity;
 import aning.reconstruction.application.Application;
 import aning.reconstruction.interfaces.OnDataPassListener;
 import aning.reconstruction.model.Response;
@@ -39,6 +38,7 @@ import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.Log;
 
 
 /**
@@ -147,7 +147,7 @@ public class LoginFragment extends BaseFragment {
 	@Override
 	public void initData() {//必须在onCreateView方法内调用
 		if (Application.getInstance().isLoggedIn()) {
-			Intent intent = MainTabActivity.createIntent(getActivity(), Application.getInstance().getCurrentUserId());
+			Intent intent = MainActivity.createIntent(getActivity(), Application.getInstance().getCurrentUserId());
 			toActivity(intent);
 			getActivity().finish(); // 关闭当前的Activity
 		}
@@ -203,7 +203,7 @@ public class LoginFragment extends BaseFragment {
 											User user = new User(userId);
 											Application.getInstance().saveCurrentUser(user);
 
-											Intent intent = MainTabActivity.createIntent(getActivity(), userId);
+											Intent intent = MainActivity.createIntent(getActivity(), userId);
 											toActivity(intent);
 											getActivity().finish(); // 关闭当前的Activity
 										} else {
@@ -211,6 +211,7 @@ public class LoginFragment extends BaseFragment {
 										}
 									} catch (Exception error) {
 										showShortToast(R.string.sys_error);
+										Log.e(TAG, error.getMessage());
 									}
 								}
 							}

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/activity_page">
+
+    <RelativeLayout
+        android:id="@+id/rlBottomTabTopbar"
+        style="@style/topbar_customize"
+        android:background="@color/colorMain"
+        >
+
+        <TextView
+            android:id="@+id/delete_tv"
+            style="@style/topbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="121dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:text="删除"
+            android:textColor="@color/red"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/cancel_tv"
+            style="@style/topbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="12dp"
+            android:clickable="true"
+            android:text="取消"
+            android:textColor="@color/gray"
+            android:visibility="invisible" />
+
+        <TextView
+            style="@style/topbar_title"
+            android:text="三维重建" />
+    </RelativeLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/activity_page">
+
+
+        <FrameLayout
+            android:id="@+id/flMainFragmentContainer"
+            style="@style/match_match"
+            android:layout_weight="1"
+            >
+        </FrameLayout>
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            style="@style/bootom_app_bar_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            app:fabCradleMargin="16dp"
+            app:fabCradleRoundedCornerRadius="32dp"
+            app:fabCradleVerticalOffset="10dp"
+            app:hideOnScroll="true"
+            app:menu="@menu/bottom_app_bar_menu"
+            app:navigationIcon="@drawable/ic_menu" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            app:layout_anchor="@id/bottom_app_bar" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</LinearLayout>
