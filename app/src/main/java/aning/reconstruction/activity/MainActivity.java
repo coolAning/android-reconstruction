@@ -19,8 +19,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import aning.reconstruction.R;
 import aning.reconstruction.fragment.LoginFragment;
@@ -72,11 +76,16 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 	private OutputFragment outputFragment;
 	private TextView tvCancel;
 	private TextView tvDelete;
+	private BottomAppBar bottomAppBar;
+	private FloatingActionButton fab;
+	private boolean isDeleteMode = false;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
 		this.setStatusBarColor(R.color.colorMain);
 		tvCancel = findView(R.id.cancel_tv);
 		tvDelete = findView(R.id.delete_tv);
+		bottomAppBar = findView(R.id.bottom_app_bar);
+		fab = findView(R.id.fab);
 		outputFragment = OutputFragment.createInstance(getIntent().getLongExtra(INTENT_USER_ID, 0));
 		fragmentManager
 				.beginTransaction()
@@ -140,6 +149,39 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 				if (outputFragment != null){
 					outputFragment.delete();
 				}
+			}
+		});
+
+		bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showShortToast("Navigation button clicked");
+			}
+		});
+
+		bottomAppBar.setOnMenuItemClickListener(new BottomAppBar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.action_search:
+						showShortToast("search clicked");
+						break;
+					case R.id.action_delete:
+						isDeleteMode = !isDeleteMode;
+						if(isDeleteMode) {
+							outputFragment.onDeleteMode();
+						}else {
+							outputFragment.cancel();
+						}
+						break;
+				}
+				return true;
+			}
+		});
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showShortToast("fab clicked");
 			}
 		});
 	}

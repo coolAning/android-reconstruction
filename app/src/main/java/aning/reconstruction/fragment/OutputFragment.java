@@ -362,4 +362,10 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		changeEditMode(View.GONE);
 	}
 
+	public boolean onDeleteMode() {
+		adapter.setHasCheck(true);
+		changeEditMode(View.VISIBLE);
+		return true;
+	}
+
 }
