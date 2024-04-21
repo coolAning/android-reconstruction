@@ -10,7 +10,6 @@
 
         <TextView
             style="@style/topbar_title"
-            android:layout_centerHorizontal="true"
             android:text="@string/login" />
 
     </RelativeLayout>

@@ -4,7 +4,7 @@
 
     <RelativeLayout
         android:id="@+id/rlBottomTabTopbar"
-        style="@style/topbar_bg" >
+        style="@style/topbar_customize" >
 
         <TextView
             android:id="@+id/delete_tv"
