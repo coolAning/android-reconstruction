@@ -1,4 +1,4 @@
-package aning.reconstruction.ui;
+package aning.reconstruction.fragment;
 
 import static zuo.biao.library.interfaces.FragmentPresenter.RESULT_OK;
 import static zuo.biao.library.util.CommonUtil.showShortToast;
@@ -24,9 +24,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import aning.reconstruction.R;
 import aning.reconstruction.activity.ConnectionActivity;
 import aning.reconstruction.activity.UploadActivity;
-import aning.reconstruction.fragment.LoginFragment;
 
-public class BottomSheet extends BottomSheetDialogFragment {
+public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     public static final String TAG = "BottomSheet";
     public static final String INTENT_USER_ID = "INTENT_USER_ID";
@@ -36,7 +35,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
      * @param userId
      * @return
      */
-    public static BottomSheet createInstance(long userId) {
+    public static BottomSheetFragment createInstance(long userId) {
         return createInstance(userId, null);
     }
     /**创建一个Fragment实例
@@ -44,8 +43,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
      * @param userName
      * @return
      */
-    public static BottomSheet createInstance(long userId, String userName) {
-        BottomSheet fragment = new BottomSheet();
+    public static BottomSheetFragment createInstance(long userId, String userName) {
+        BottomSheetFragment fragment = new BottomSheetFragment();
 
         Bundle bundle = new Bundle();
         bundle.putLong(INTENT_USER_ID, userId);
