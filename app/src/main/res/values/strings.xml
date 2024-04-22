@@ -37,11 +37,14 @@
     <string name="create_model">创建模型</string>
     <string name="from_video_create">从相册创建</string>
     <string name="from_drone_create">从无人机创建</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="setting">设置</string>
     <!--    相机相关-->
 
 
     <!--系统名词-->
-    <string name="reconstruction">三维重建系统</string>
+    <string name="reconstruction">三维重建</string>
     <!--系统名词-->
 
     <!--系统相关-->

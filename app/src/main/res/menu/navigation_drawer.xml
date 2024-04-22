@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/main_item"
-        android:title="test">
+        android:id="@+id/setting_item"
+        android:title="@string/setting">
         <menu>
             <item
                 android:id="@+id/test1"
                 android:icon="@drawable/ic_search"
                 android:title="test1"
-                android:checkable="true"/>
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
             <item
                 android:id="@+id/test2"
                 android:icon="@drawable/ic_search"
                 android:title="test2"
-                android:checkable="true"/>
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
             <item
                 android:id="@+id/test3"
                 android:icon="@drawable/ic_search"
                 android:title="test3"
-                android:checkable="true"/>
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/system_item">
+        <menu>
+            <item
+                android:id="@+id/exit"
+                android:icon="@drawable/ic_exit"
+                android:title="@string/exit"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
         </menu>
     </item>
 </menu>
