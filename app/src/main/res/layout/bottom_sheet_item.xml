@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/activity_page">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/wrap_wrap"
+            android:text="@string/create_model"
+            android:textSize="30sp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_file"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_marginBottom="10dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/from_video_create" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_connectdrone"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/from_drone_create" />
+    </LinearLayout>
+
+</LinearLayout>

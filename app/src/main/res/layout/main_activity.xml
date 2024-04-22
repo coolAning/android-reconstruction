@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/activity_page">
 
     <RelativeLayout
         android:id="@+id/rlBottomTabTopbar"
         style="@style/topbar_customize"
-        android:background="@color/colorMain"
-        >
+        android:background="@color/colorMain">
 
         <TextView
             android:id="@+id/delete_tv"
@@ -47,17 +47,14 @@
             android:text="三维重建" />
     </RelativeLayout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        style="@style/activity_page">
-
+    <androidx.coordinatorlayout.widget.CoordinatorLayout style="@style/activity_page">
 
         <FrameLayout
             android:id="@+id/flMainFragmentContainer"
             style="@style/match_match"
-            android:layout_weight="1"
-            >
-        </FrameLayout>
+            android:layout_weight="1" />
+
+
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
@@ -74,14 +71,12 @@
             app:menu="@menu/bottom_app_bar_menu"
             app:navigationIcon="@drawable/ic_menu" />
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add"
             app:layout_anchor="@id/bottom_app_bar" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>
