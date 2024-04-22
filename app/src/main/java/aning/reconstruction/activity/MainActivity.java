@@ -20,10 +20,15 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import aning.reconstruction.R;
 import aning.reconstruction.fragment.OutputFragment;
@@ -57,6 +62,7 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
+		// 加载单独封装的 Navigation Drawer 布局
 
 		intent = getIntent();
 		userId = intent.getLongExtra(INTENT_USER_ID, userId);
@@ -78,6 +84,8 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 	private FloatingActionButton fab;
 	private boolean isDeleteMode = false;
 	private BottomSheetFragment bottomSheet;
+	private DrawerLayout drawerLayout;
+	private NavigationView navigationView;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
 		this.setStatusBarColor(R.color.colorMain);
@@ -93,6 +101,10 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 				.addToBackStack("loginFragment")
 				.show(outputFragment)
 				.commit();
+
+		drawerLayout = findView(R.id.drawer_layout);
+		navigationView = findView(R.id.nav_view);
+
 	}
 
 
@@ -155,7 +167,7 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 		bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showShortToast("Navigation button clicked");
+				drawerLayout.open();
 			}
 		});
 
@@ -184,6 +196,26 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 				bottomSheet.show(getSupportFragmentManager(), BottomSheetFragment.TAG);
 			}
 		});
+
+		navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.test1:
+						showShortToast("test1 clicked");
+						break;
+					case R.id.test2:
+						showShortToast("test2 clicked");
+						break;
+					case R.id.test3:
+						showShortToast("test3 clicked");
+						break;
+				}
+				drawerLayout.close();
+				return true;
+			}
+		});
+
 	}
 
 
