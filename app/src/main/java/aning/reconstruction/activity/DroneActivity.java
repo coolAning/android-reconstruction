@@ -264,7 +264,7 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 
 	// Method for starting recording
 	private void startUpload(){
-		showShortToast("Start Live Show");
+//		showShortToast("Start Live Show");
 		if (!isLiveStreamManagerOn()) {
 			return;
 		}
@@ -322,7 +322,7 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 			return;
 		}
 		DJISDKManager.getInstance().getLiveStreamManager().stopStream();
-		showShortToast("Stop Live Show");
+		showShortToast("停止上传");
 		// 停止计时器
 		recordHandler.removeCallbacks(recordRunnable);
 		recordingTime.setVisibility(View.INVISIBLE);
