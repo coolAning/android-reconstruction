@@ -27,10 +27,12 @@ import android.widget.TextView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import aning.reconstruction.R;
+import aning.reconstruction.application.Application;
 import aning.reconstruction.fragment.OutputFragment;
 import aning.reconstruction.fragment.BottomSheetFragment;
 import zuo.biao.library.base.BaseActivity;
@@ -201,16 +203,28 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 			@Override
 			public boolean onNavigationItemSelected(MenuItem item) {
 				switch (item.getItemId()) {
-					case R.id.test1:
-						showShortToast("test1 clicked");
+					case R.id.personal_setting:
+						toActivity(SettingActivity.createIntent(context));
 						break;
-					case R.id.test2:
-						showShortToast("test2 clicked");
+					case R.id.model_setting:
+						showShortToast("model_setting clicked");
 						break;
-					case R.id.test3:
-						showShortToast("test3 clicked");
+					case R.id.exit:
+						new MaterialAlertDialogBuilder(context)
+								.setTitle("退出登录")
+								.setMessage("确定退出登录？")
+								.setPositiveButton("确定", (dialog, which) -> {
+									//退出登录
+									Application.getInstance().logout();
+									context.finish();
+								})
+								.setNegativeButton("取消", (dialog, which) -> {
+									//取消
+									item.setChecked(false);
+								}).show();
 						break;
 				}
+
 				drawerLayout.close();
 				return true;
 			}

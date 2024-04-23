@@ -6,27 +6,22 @@
         android:title="@string/setting">
         <menu>
             <item
-                android:id="@+id/test1"
-                android:icon="@drawable/ic_search"
-                android:title="test1"
+                android:id="@+id/personal_setting"
+                android:icon="@drawable/ic_personal_setting"
+                android:title="@string/personal_setting"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
             <item
-                android:id="@+id/test2"
-                android:icon="@drawable/ic_search"
-                android:title="test2"
-                android:checkable="true"
-                app:showAsAction="ifRoom"/>
-            <item
-                android:id="@+id/test3"
-                android:icon="@drawable/ic_search"
-                android:title="test3"
+                android:id="@+id/model_setting"
+                android:icon="@drawable/ic_model_setting"
+                android:title="@string/model_setting"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
         </menu>
     </item>
     <item
-        android:id="@+id/system_item">
+        android:id="@+id/system_item"
+        android:title="">
         <menu>
             <item
                 android:id="@+id/exit"

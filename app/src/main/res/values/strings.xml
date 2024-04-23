@@ -40,6 +40,7 @@
     <string name="cancel">取消</string>
     <string name="delete">删除</string>
     <string name="setting">设置</string>
+    <string name="model_setting">模型设置</string>
     <!--    相机相关-->
 
 
@@ -50,6 +51,7 @@
     <!--系统相关-->
     <string name="response_null">请求结果异常</string>
     <string name="waiting">请稍后</string>
+    <string name="personal_setting">个人设置</string>
     <!--系统相关-->
 
 <!--    无人机相关-->
