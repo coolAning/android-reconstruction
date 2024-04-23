@@ -17,32 +17,21 @@ package aning.reconstruction.fragment;
 import static zuo.biao.library.util.JSON.parseObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import aning.reconstruction.DEMO.DemoAdapter;
 import aning.reconstruction.R;
-import aning.reconstruction.activity.MainTabActivity;
-import aning.reconstruction.activity.UserActivity;
 import aning.reconstruction.interfaces.OnDataPassListener;
-import aning.reconstruction.model.Response;
+import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.model.Entry;
 
 
 /**
@@ -183,14 +172,14 @@ public class RetrievePasswordFragment extends BaseFragment {
                             } else {
                                 if(requestCode == requestCodeCaptcha){
                                     try {
-                                        Response response = parseObject(resultJson, Response.class);
-                                        if (response == null) {
+                                        HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+                                        if (HTTPResponse == null) {
                                             throw new Exception("Response is null");
                                         }
-                                        if (response.getCode() == 0) {
+                                        if (HTTPResponse.getCode() == 0) {
                                             showShortToast("验证码已发送");
                                         } else {
-                                            showShortToast(response.getMsg());
+                                            showShortToast(HTTPResponse.getMsg());
                                         }
                                     } catch (Exception error) {
                                         showShortToast(R.string.sys_error);
@@ -244,18 +233,18 @@ public class RetrievePasswordFragment extends BaseFragment {
                             } else {
                                 if (requestCode == requestCodeRetrieve) {
                                     try {
-                                        Response response = parseObject(resultJson, Response.class);
-                                        if (response == null) {
+                                        HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+                                        if (HTTPResponse == null) {
                                             throw new Exception("Response is null");
                                         }
-                                        if (response.getCode() == 0) {
+                                        if (HTTPResponse.getCode() == 0) {
                                             showShortToast("密码修改成功");
                                             // 找回密码成功后，返回登录页面
                                             if (mCallback != null) {
                                                 mCallback.onFragmentMessageListener(0);
                                             }
                                         } else {
-                                            showShortToast(response.getMsg());
+                                            showShortToast(HTTPResponse.getMsg());
                                         }
                                     } catch (Exception error) {
                                         showShortToast(error.getMessage());

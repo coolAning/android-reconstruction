@@ -1,21 +1,21 @@
 package aning.reconstruction.model;
 
 
-public class Response {
+public class HTTPResponse {
     private int code;
     private String msg;
     private Object data;
 
-    public Response() {
+    public HTTPResponse() {
         //default
     }
-    public Response(int code, String msg) {
+    public HTTPResponse(int code, String msg) {
         this();
         this.code = code;
         this.msg = msg;
     }
 
-    public Response(int code, String msg, Object data) {
+    public HTTPResponse(int code, String msg, Object data) {
         this(code, msg);
         this.data = data;
     }

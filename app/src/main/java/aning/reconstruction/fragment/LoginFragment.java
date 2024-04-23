@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,7 +32,7 @@ import aning.reconstruction.R;
 import aning.reconstruction.activity.MainTabActivity;
 import aning.reconstruction.application.Application;
 import aning.reconstruction.interfaces.OnDataPassListener;
-import aning.reconstruction.model.Response;
+import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.model.User;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseFragment;
@@ -191,13 +190,13 @@ public class LoginFragment extends BaseFragment {
 							}else {
 								if (requestCode == requestCodeLogin) {
 									try {
-										Response response = parseObject(resultJson, Response.class);
-										if (response == null) {
+										HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+										if (HTTPResponse == null) {
 											throw new Exception("Response is null");
 										}
-										if (response.getCode() == 0) {
+										if (HTTPResponse.getCode() == 0) {
 
-											Map<String, Object> map = JSON.parseObject(JSON.toJSONString(response.getData()));
+											Map<String, Object> map = JSON.parseObject(JSON.toJSONString(HTTPResponse.getData()));
 											long userId = Long.parseLong(map.get("userId").toString());
 
 											User user = new User(userId);
@@ -207,7 +206,7 @@ public class LoginFragment extends BaseFragment {
 											toActivity(intent);
 											getActivity().finish(); // 关闭当前的Activity
 										} else {
-											showShortToast(response.getMsg());
+											showShortToast(HTTPResponse.getMsg());
 										}
 									} catch (Exception error) {
 										showShortToast(R.string.sys_error);

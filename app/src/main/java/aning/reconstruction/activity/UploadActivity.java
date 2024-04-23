@@ -22,14 +22,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MediaController;
-import android.widget.TextView;
 import android.widget.VideoView;
 import android.net.Uri;
 
@@ -37,15 +35,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.File;
-import java.util.Map;
 
 import aning.reconstruction.R;
-import aning.reconstruction.model.Response;
+import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
 
 
 /**activity示例
@@ -191,16 +187,16 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 							}else {
 								if (requestCode == requestCodeUpload) {
 									try {
-										Response response = parseObject(resultJson, Response.class);
-										if (response == null) {
+										HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+										if (HTTPResponse == null) {
 											throw new Exception("Response is null");
 										}
-										if (response.getCode() == 0) {
+										if (HTTPResponse.getCode() == 0) {
 											showShortToast(R.string.upload_success);
 											getActivity().finish(); // 关闭当前的Activity
 
 										} else {
-											showShortToast(response.getMsg());
+											showShortToast(HTTPResponse.getMsg());
 										}
 									} catch (Exception error) {
 										showShortToast(R.string.sys_error);

@@ -29,15 +29,11 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import java.util.function.ToDoubleBiFunction;
-
 import aning.reconstruction.R;
 import aning.reconstruction.application.FPVApplication;
-import aning.reconstruction.model.Response;
+import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.ui.SettingDialog;
 import aning.reconstruction.util.HttpRequest;
-import dji.common.camera.SettingsDefinitions;
-import dji.common.camera.SystemState;
 import dji.common.error.DJIError;
 import dji.common.product.Model;
 import dji.common.useraccount.UserAccountState;
@@ -49,9 +45,7 @@ import dji.sdk.codec.DJICodecManager;
 import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
 import zuo.biao.library.base.BaseActivity;
-import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.StringUtil;
 
 
 public class DroneActivity extends BaseActivity implements TextureView.SurfaceTextureListener, View.OnClickListener {
@@ -298,14 +292,14 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 				}else {
 					if (requestCode == requestCodeSetDrone) {
 						try {
-							Response response = parseObject(resultJson, Response.class);
-							if (response == null) {
+							HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+							if (HTTPResponse == null) {
 								throw new Exception("Response is null");
 							}
-							if (response.getCode() == 0) {
+							if (HTTPResponse.getCode() == 0) {
 								showShortToast(R.string.drone_video_uploading);
 							} else {
-								showShortToast(response.getMsg());
+								showShortToast(HTTPResponse.getMsg());
 							}
 						} catch (Exception error) {
 							showShortToast(R.string.sys_error);

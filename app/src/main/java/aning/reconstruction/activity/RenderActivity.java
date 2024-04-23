@@ -19,15 +19,11 @@ import static zuo.biao.library.util.JSON.parseObject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.alibaba.fastjson.TypeReference;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -35,13 +31,11 @@ import java.util.List;
 import java.util.Map;
 
 import aning.reconstruction.R;
-import aning.reconstruction.model.Response;
+import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.model.Entry;
-import zuo.biao.library.util.JSON;
 
 public class RenderActivity extends BaseActivity implements OnBottomDragListener, OnHttpResponseListener {
 	private static final String TAG = "RenderActivity";
@@ -277,16 +271,16 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 		}else {
 			if (requestCode == requestCodeRender) {
 				try {
-					Response response = parseObject(resultJson, Response.class);
-					if (response == null) {
+					HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+					if (HTTPResponse == null) {
 						throw new Exception("Response is null");
 					}
-					if (response.getCode() == 0) {
-						Map<String,String> dataMap = (Map<String, String>) response.getData();
+					if (HTTPResponse.getCode() == 0) {
+						Map<String,String> dataMap = (Map<String, String>) HTTPResponse.getData();
 						setIvRender(dataMap.get("url"));
 
 					} else {
-						showShortToast(response.getMsg());
+						showShortToast(HTTPResponse.getMsg());
 					}
 				} catch (Exception error) {
 					showShortToast(R.string.sys_error);

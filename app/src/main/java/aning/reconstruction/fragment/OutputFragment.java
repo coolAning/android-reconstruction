@@ -17,7 +17,6 @@ package aning.reconstruction.fragment;
 import static zuo.biao.library.util.JSON.parseObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +37,7 @@ import java.util.Map;
 import aning.reconstruction.R;
 import aning.reconstruction.activity.RenderActivity;
 import aning.reconstruction.adapter.RenderAdapter;
-import aning.reconstruction.model.Response;
+import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseListFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
@@ -194,12 +193,12 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 				}else {
 					if (requestCode == requestCodeGetModelList) {
 						try {
-							Response response = parseObject(resultJson, Response.class);
-							if (response == null) {
+							HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+							if (HTTPResponse == null) {
 								throw new Exception("Response is null");
 							}
-							if (response.getCode() == 0) {
-								List<Object> mapList = JSON.parseJson(JSON.toJSONString(response.getData()), new TypeReference<List<Object>>() {});
+							if (HTTPResponse.getCode() == 0) {
+								List<Object> mapList = JSON.parseJson(JSON.toJSONString(HTTPResponse.getData()), new TypeReference<List<Object>>() {});
 								if (mapList == null || mapList.size()==0) {
 									Log.i(TAG, "返回列表为空");
 								}else {
@@ -216,7 +215,7 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 								onLoadSucceed(page, list);
 								onStopRefresh();
 							} else {
-								showShortToast(response.getMsg());
+								showShortToast(HTTPResponse.getMsg());
 							}
 						} catch (Exception error) {
 							showShortToast(R.string.sys_error);
@@ -340,15 +339,15 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 					}else {
 						if (requestCode == requestCodeDeleteModel) {
 							try {
-								Response response = parseObject(resultJson, Response.class);
-								if (response == null) {
+								HTTPResponse HTTPResponse = parseObject(resultJson, HTTPResponse.class);
+								if (HTTPResponse == null) {
 									throw new Exception("Response is null");
 								}
-								if (response.getCode() == 0) {
+								if (HTTPResponse.getCode() == 0) {
 									showShortToast("删除成功");
 									srlBaseHttpRecycler.autoRefresh();
 								} else {
-									showShortToast(response.getMsg());
+									showShortToast(HTTPResponse.getMsg());
 								}
 							} catch (Exception error) {
 								showShortToast(R.string.sys_error);
