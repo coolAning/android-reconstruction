@@ -34,16 +34,24 @@
     <string name="load_faild">加载失败，请检查网络重试</string>
     <string name="delete_faild">删除失败，请检查网络重试</string>
     <string name="on_uploadding">上传中</string>
+    <string name="create_model">创建模型</string>
+    <string name="from_video_create">从相册创建</string>
+    <string name="from_drone_create">从无人机创建</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="setting">设置</string>
+    <string name="model_setting">模型设置</string>
     <!--    相机相关-->
 
 
     <!--系统名词-->
-    <string name="reconstruction">三维重建系统</string>
+    <string name="reconstruction">三维重建</string>
     <!--系统名词-->
 
     <!--系统相关-->
     <string name="response_null">请求结果异常</string>
     <string name="waiting">请稍后</string>
+    <string name="personal_setting">个人设置</string>
     <!--系统相关-->
 
 <!--    无人机相关-->
