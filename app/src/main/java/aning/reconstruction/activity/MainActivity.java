@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 	@Override
 	public void initView() {//必须在onCreate方法内调用
 		this.setStatusBarColor(R.color.colorMain);
-		bottomSheet = new BottomSheetFragment();
+		bottomSheet = BottomSheetFragment.createInstance(userId);
 		tvCancel = findView(R.id.cancel_tv);
 		tvDelete = findView(R.id.delete_tv);
 		bottomAppBar = findView(R.id.bottom_app_bar);

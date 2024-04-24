@@ -64,9 +64,9 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 	public static final String RESULT_CLICKED_ITEM = "RESULT_CLICKED_ITEM";
 
 	//后端rtmp地址url
-	private static final String baseLiveShowUrl = "rtmp://118.202.10.58:6666/live";
+	private static final String baseLiveShowUrl = "rtmp://118.202.10.58:6666/live/";
 
-	private String liveShowUrl = baseLiveShowUrl + "/";
+	private String liveShowUrl = "";
 	private String name = "";
 	private int trainSteps = 0;
 
@@ -251,7 +251,7 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 							name=filename;
 							trainSteps = trainStep;
 							recordBtn.setClickable(true);
-							liveShowUrl = liveShowUrl + String.valueOf(userId)+"_" + name;
+							liveShowUrl = baseLiveShowUrl + String.valueOf(userId)+"_" + name;
 							Log.i(TAG, "liveshowurl: " + liveShowUrl);
 						}
 					}
