@@ -17,10 +17,13 @@ package aning.reconstruction.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +33,8 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import aning.reconstruction.R;
 import aning.reconstruction.application.Application;
@@ -88,6 +93,9 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 	private BottomSheetFragment bottomSheet;
 	private DrawerLayout drawerLayout;
 	private NavigationView navigationView;
+	private TextView tobBarTitle;
+	private TextInputLayout search_bar_layout;
+	private TextInputEditText search_bar;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
 		this.setStatusBarColor(R.color.colorMain);
@@ -106,7 +114,9 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 
 		drawerLayout = findView(R.id.drawer_layout);
 		navigationView = findView(R.id.nav_view);
-
+		search_bar_layout = findView(R.id.search_bar_layout);
+		search_bar = findView(R.id.search_bar_edit_text);
+		tobBarTitle = findView(R.id.topbar_title_tv);
 	}
 
 
@@ -178,7 +188,17 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 			public boolean onMenuItemClick(MenuItem item) {
 				switch (item.getItemId()) {
 					case R.id.action_search:
-						showShortToast("search clicked");
+						if (search_bar_layout.getVisibility() == View.VISIBLE) {
+							search_bar_layout.setVisibility(View.GONE);
+							tobBarTitle.setVisibility(View.VISIBLE);
+						} else {
+							search_bar_layout.setVisibility(View.VISIBLE);
+							tobBarTitle.setVisibility(View.GONE);
+							search_bar.requestFocus();
+							// 唤醒输入法
+							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.showSoftInput(search_bar, InputMethodManager.SHOW_IMPLICIT);
+						}
 						break;
 					case R.id.action_delete:
 						isDeleteMode = !isDeleteMode;
@@ -229,6 +249,18 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 				return true;
 			}
 		});
+		search_bar.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				outputFragment.search(search_bar.getText().toString());
+			}
+		});
 
 	}
 
@@ -254,13 +286,25 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		switch(keyCode){
 			case KeyEvent.KEYCODE_BACK:
-				long secondTime = System.currentTimeMillis();
-				if(secondTime - firstTime > 2000){
-					showShortToast("再按一次退出");
-					firstTime = secondTime;
-				} else {//完全退出
-					moveTaskToBack(false);//应用退到后台
-					System.exit(0);
+				// 检查是否处于删除模式 搜索模式 抽屉模式
+				if (isDeleteMode) {
+					isDeleteMode = false;
+					outputFragment.cancel();
+				}else if (search_bar_layout.getVisibility() == View.VISIBLE) {
+					search_bar_layout.setVisibility(View.GONE);
+					tobBarTitle.setVisibility(View.VISIBLE);
+				}else if (drawerLayout.isOpen()) {
+					drawerLayout.close();
+				}else {
+					// 退出流程
+					long secondTime = System.currentTimeMillis();
+					if(secondTime - firstTime > 2000){
+						showShortToast("再按一次退出");
+						firstTime = secondTime;
+					} else {//完全退出
+						moveTaskToBack(false);//应用退到后台
+						System.exit(0);
+					}
 				}
 				return true;
 		}

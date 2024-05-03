@@ -9,6 +9,27 @@
         style="@style/topbar_customize"
         android:background="@color/colorMain">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_bar_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/search"
+            app:boxStrokeColor="@color/colorLogin"
+            android:visibility="gone"
+            app:hintEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_bar_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint"
+                android:imeOptions="actionSearch"
+                android:textSize="12sp"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
         <TextView
             android:id="@+id/delete_tv"
             style="@style/topbar_title"
@@ -24,7 +45,7 @@
             android:clickable="true"
             android:text="@string/delete"
             android:textColor="@color/red"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/cancel_tv"
@@ -41,11 +62,17 @@
             android:clickable="true"
             android:text="@string/cancel"
             android:textColor="@color/gray"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <TextView
+            android:id="@+id/topbar_title_tv"
             style="@style/topbar_title"
-            android:text="@string/reconstruction" />
+            android:text="@string/reconstruction"
+            android:visibility="visible"
+            />
+
+
+
     </RelativeLayout>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -53,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        >
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"

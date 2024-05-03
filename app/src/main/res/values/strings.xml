@@ -52,6 +52,7 @@
     <string name="response_null">请求结果异常</string>
     <string name="waiting">请稍后</string>
     <string name="personal_setting">个人设置</string>
+    <string name="search_hint">输入关键词搜索</string>
     <!--系统相关-->
 
 <!--    无人机相关-->

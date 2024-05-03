@@ -171,7 +171,7 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 
 
 	//Data数据区(存在数据获取或处理代码，但不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+	List<Entry<String, String>> list;
 	@Override
 	public void initData() {//必须在onCreateView方法内调用
 		super.initData();
@@ -183,7 +183,7 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 	@Override
 	public void getListAsync(int page) {
 
-		List<Entry<String, String>> list = new ArrayList<Entry<String, String>>();
+		list = new ArrayList<Entry<String, String>>();
 
 		HttpRequest.getModelList(requestCodeGetModelList,new OnHttpResponseListener() {
 			@Override
@@ -365,6 +365,22 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 		adapter.setHasCheck(true);
 		changeEditMode(View.VISIBLE);
 		return true;
+	}
+
+
+	/**
+	 * 搜索
+	 * @param search
+	 */
+	public void search(String search) {
+		List<Entry<String, String>> newList = new ArrayList<Entry<String, String>>();
+		for (Entry<String, String> item : list) {
+			if (item.getValue().contains(search)) {
+				newList.add(item);
+			}
+		}
+		adapter.refresh(newList);
+
 	}
 
 }
