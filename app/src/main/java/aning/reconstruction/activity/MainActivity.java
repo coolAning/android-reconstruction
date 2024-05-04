@@ -14,6 +14,8 @@ limitations under the License.*/
 
 package aning.reconstruction.activity;
 
+import static zuo.biao.library.util.SettingUtil.KEY_IS_FIRST_START;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import aning.reconstruction.application.Application;
 import aning.reconstruction.fragment.OutputFragment;
 import aning.reconstruction.fragment.BottomSheetFragment;
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.util.SettingUtil;
 
 public class MainActivity extends BaseActivity implements OutputFragment.OnVisibilityChangeListener {
 	private static final String TAG = "MainActivity";
@@ -117,6 +120,44 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 		search_bar_layout = findView(R.id.search_bar_layout);
 		search_bar = findView(R.id.search_bar_edit_text);
 		tobBarTitle = findView(R.id.topbar_title_tv);
+
+		// 判断是否第一次进入app加载新手引导
+		if (SettingUtil.getBoolean(KEY_IS_FIRST_START, true)) {
+			new MaterialAlertDialogBuilder(context)
+					.setTitle("使用引导")
+					.setMessage("屏幕最下方有四个按钮，从左到右分别是：\n" +
+							"1. 侧边栏按钮，点击打开侧边栏\n" +
+							"2. 创建按钮，点击打开创建选项\n" +
+							"3. 搜索按钮，点击搜索你的模型\n" +
+							"4. 删除按钮，点击进入删除模式\n" )
+					.setPositiveButton("下一条", (dialog1, which1) -> {
+						// 显示新手引导
+						drawerLayout.open();
+
+						new MaterialAlertDialogBuilder(context)
+								.setTitle("侧边栏")
+								.setMessage("侧边栏包括了个人设置和模型设置，点击退出登录退出当前账号")
+								.setPositiveButton("下一条", (dialog2, which2) -> {
+									// 显示新手引导
+									drawerLayout.close();
+									fab.performClick();
+
+									new MaterialAlertDialogBuilder(context)
+											.setTitle("创建模型")
+											.setMessage("创建模型包括从相册创建和连接无人机创建，二者均需要给模型命名并设定训练步数，视频时常最好1分钟左右。训练大概需要10分钟左右，请耐心等待。")
+											.setPositiveButton("下一条", (dialog3, which3) -> {
+											})
+											.show();
+								})
+								.show();
+
+						// 设置第一次启动为false
+						SettingUtil.putBoolean(KEY_IS_FIRST_START, false);
+
+					})
+					.show();
+
+		}
 	}
 
 
