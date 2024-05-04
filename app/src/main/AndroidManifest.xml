@@ -153,7 +153,10 @@
             android:name="aning.reconstruction.activity.ConnectionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
+        <activity
+            android:name="aning.reconstruction.activity.ModelSettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
 
         <activity android:name="aning.reconstruction.DEMO.DemoThreadPoolActivity"></activity>

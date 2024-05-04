@@ -9,13 +9,13 @@
                 android:id="@+id/personal_setting"
                 android:icon="@drawable/ic_personal_setting"
                 android:title="@string/personal_setting"
-                android:checkable="true"
+                android:checkable="false"
                 app:showAsAction="ifRoom"/>
             <item
                 android:id="@+id/model_setting"
                 android:icon="@drawable/ic_model_setting"
                 android:title="@string/model_setting"
-                android:checkable="true"
+                android:checkable="false"
                 app:showAsAction="ifRoom"/>
         </menu>
     </item>

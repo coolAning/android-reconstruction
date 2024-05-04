@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity implements OutputFragment.OnVisib
 						toActivity(SettingActivity.createIntent(context));
 						break;
 					case R.id.model_setting:
-						showShortToast("model_setting clicked");
+						toActivity(ModelSettingActivity.createIntent(context, userId));
 						break;
 					case R.id.exit:
 						new MaterialAlertDialogBuilder(context)
