@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+
 import aning.reconstruction.R;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -165,18 +167,43 @@ public class SettingActivity extends BaseActivity implements OnBottomDragListene
 
 					@Override
 					public void run() {
+						long beforeSize = getDiskCacheSize();
 						Glide.get(context).clearDiskCache();
+						long afterSize = getDiskCacheSize();
+						long clearedSize = (beforeSize - afterSize)/(1024 * 1024);
 						runUiThread(new Runnable() {
 
 							@Override
 							public void run() {
 								dismissProgressDialog();
+								showShortToast("清除了" + clearedSize + "MB缓存");
 							}
 						});
 					}
 				});
 			}
 		});
+	}
+	private long getDiskCacheSize() {
+		File cacheDir = Glide.getPhotoCacheDir(context);
+		return getFolderSize(cacheDir);
+	}
+
+	private long getFolderSize(File file) {
+		long size = 0;
+		try {
+			File[] fileList = file.listFiles();
+			for (File aFileList : fileList) {
+				if (aFileList.isDirectory()) {
+					size = size + getFolderSize(aFileList);
+				} else {
+					size = size + aFileList.length();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return size;
 	}
 
 	@Override
