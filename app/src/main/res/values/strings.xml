@@ -66,6 +66,7 @@
     <string name="stop_upload">停止上传</string>
     <string name="parameter_settings">参数设置</string>
     <string name="drone_video_uploading">无人机视频上传中</string>
+    <string name="clear_cache">清空缓存</string>
     <!--    无人机相关-->
 
 </resources>

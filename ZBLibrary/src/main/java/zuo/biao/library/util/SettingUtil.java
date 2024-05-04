@@ -36,34 +36,17 @@ public final class SettingUtil {
 
 
 	public static final String KEY_CACHE = "KEY_CACHE";//开启缓存
-	public static final String KEY_PRELOAD = "KEY_PRELOAD";//开启预加载
-
-	public static final String KEY_VOICE = "KEY_VOICE";//开启通知声
-	public static final String KEY_VIBRATE = "KEY_VIBRATE";//开启震动
-	public static final String KEY_NO_DISTURB = "KEY_NO_DISTURB";//夜间防打扰
-
 	public static final String KEY_IS_ON_TEST_MODE = "KEY_IS_ON_TEST_MODE";//测试模式
 	public static final String KEY_IS_FIRST_START = "KEY_IS_FIRST_START";//第一次打开应用
 
 	public static final String[] KEYS = {
 		KEY_CACHE,
-		KEY_PRELOAD,
-
-		KEY_VOICE,
-		KEY_VIBRATE,
-		KEY_NO_DISTURB,
-
 		KEY_IS_ON_TEST_MODE,
 		KEY_IS_FIRST_START,
 	};
 
 	public static boolean cache = true;//开启缓存
 	public static boolean preload = true;//开启预加载
-
-	public static boolean voice = true;//开启通知声
-	public static boolean vibrate = true;//开启震动
-	public static boolean noDisturb = false;//夜间防打扰
-
 	public static boolean isOnTestMode = true;//测试模式
 	public static boolean isFirstStart = true;//第一次打开应用
 
@@ -71,12 +54,6 @@ public final class SettingUtil {
 	static {
 		defaultValues = new boolean[]{
 				cache,//开启缓存
-				preload,//开启预加载
-
-				voice,//开启通知声
-				vibrate,//开启震动
-				noDisturb,//夜间防打扰
-
 				isOnTestMode,//测试模式
 				isFirstStart,//第一次打开应用
 		};
@@ -88,14 +65,7 @@ public final class SettingUtil {
 	 */
 	public static void init(Context context_) {
 		context = context_;
-
 		cache = getBoolean(KEY_CACHE, cache);
-		preload = getBoolean(KEY_PRELOAD, preload);
-
-		voice = getBoolean(KEY_VOICE, voice);
-		vibrate = getBoolean(KEY_VIBRATE, vibrate);
-		noDisturb = getBoolean(KEY_NO_DISTURB, noDisturb);
-
 		isOnTestMode = getBoolean(KEY_IS_ON_TEST_MODE, isOnTestMode);
 		isFirstStart = getBoolean(KEY_IS_FIRST_START, isFirstStart);
 	}
@@ -196,12 +166,6 @@ public final class SettingUtil {
 		init(context);
 		return new boolean[]{
 				cache,
-				preload,
-
-				voice,
-				vibrate,
-				noDisturb,
-
 				isOnTestMode,
 				isFirstStart,
 		};
@@ -210,13 +174,6 @@ public final class SettingUtil {
 	public static final int[] NO_DISTURB_START_TIME = {23, 0};
 	public static final int[] NO_DISTURB_END_TIME = {6, 0};
 
-	/**免打扰
-	 * @return
-	 */
-	public static boolean noDisturb() {
-		return getBoolean(KEY_NO_DISTURB, noDisturb)
-				&& TimeUtil.isNowInTimeArea(NO_DISTURB_START_TIME, NO_DISTURB_END_TIME);
-	}
 
 	/**
 	 * TODO 改为你的存图片的服务器地址

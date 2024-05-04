@@ -19,12 +19,15 @@ import static zuo.biao.library.util.JSON.parseObject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.LruCache;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.SettingUtil;
 
 public class RenderActivity extends BaseActivity implements OnBottomDragListener, OnHttpResponseListener {
 	private static final String TAG = "RenderActivity";
@@ -113,8 +117,18 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 		runUiThread(new Runnable() {
 			@Override
 			public void run() {
-				Glide.with(context).load(url).into(ivRender);
-
+				if (!isCache) {
+					Glide.with(context)
+							.load(url)
+							.apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE)) // 跳过磁盘缓存
+							.apply(new RequestOptions().skipMemoryCache(true)) // 跳过内存缓存
+							.into(ivRender);
+				}else {
+					Glide.with(context)
+							.load(url)
+							.apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)) // 设置磁盘缓存策略
+							.into(ivRender);
+				}
 			}
 		});
 	}
@@ -134,8 +148,10 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 	//Data数据区(存在数据获取或处理代码，但不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	private static final int requestCodeRender = 1;
+	private Boolean isCache = true;
 	@Override
 	public void initData() {//必须在onCreate方法内调用
+		isCache = SettingUtil.getBoolean(SettingUtil.KEY_CACHE, isCache);
 		showProgressDialog(R.string.loading);
 
 		runThread(TAG + "initData", new Runnable() {

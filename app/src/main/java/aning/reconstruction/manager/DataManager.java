@@ -14,6 +14,8 @@ limitations under the License.*/
 
 package aning.reconstruction.manager;
 
+import static dji.thirdparty.afinal.utils.Utils.getDiskCacheDir;
+
 import aning.reconstruction.application.Application;
 import aning.reconstruction.model.User;
 import zuo.biao.library.util.JSON;
@@ -21,6 +23,16 @@ import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.LruCache;
+
+import com.bumptech.glide.disklrucache.DiskLruCache;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**数据工具类
  * @author Lemon
@@ -44,6 +56,7 @@ public class DataManager {
 		}
 		return instance;
 	}
+
 
 	//用户 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -211,8 +224,4 @@ public class DataManager {
 	}
 
 	//用户 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-
-
 }

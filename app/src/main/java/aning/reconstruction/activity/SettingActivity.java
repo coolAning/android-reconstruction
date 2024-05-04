@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import aning.reconstruction.R;
 import zuo.biao.library.base.BaseActivity;
@@ -50,19 +53,14 @@ public class SettingActivity extends BaseActivity implements OnBottomDragListene
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	private ImageView[] ivSettings;
+	private Button clearCacheButton;
 	@Override
 	public void initView() {//必须调用
-
-		ivSettings = new ImageView[7];
+		clearCacheButton = findView(R.id.clear_cache_button);
+		ivSettings = new ImageView[3];
 		ivSettings[0] = findView(R.id.ivSettingCache);
-		ivSettings[1] = findView(R.id.ivSettingPreload);
-
-		ivSettings[2] = findView(R.id.ivSettingVoice);
-		ivSettings[3] = findView(R.id.ivSettingVibrate);
-		ivSettings[4] = findView(R.id.ivSettingNoDisturb);
-
-		ivSettings[5] = findView(R.id.ivSettingTestMode);
-		ivSettings[6] = findView(R.id.ivSettingFirstStart);
+		ivSettings[1] = findView(R.id.ivSettingTestMode);
+		ivSettings[2] = findView(R.id.ivSettingFirstStart);
 
 	}
 
@@ -158,6 +156,27 @@ public class SettingActivity extends BaseActivity implements OnBottomDragListene
 				}
 			});
 		}
+
+		clearCacheButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showProgressDialog("正在清除缓存，请稍后...");
+				runThread(TAG, new Runnable() {
+
+					@Override
+					public void run() {
+						Glide.get(context).clearDiskCache();
+						runUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								dismissProgressDialog();
+							}
+						});
+					}
+				});
+			}
+		});
 	}
 
 	@Override
