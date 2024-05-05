@@ -66,7 +66,8 @@ public class HttpRequest {
     public static final String FILENAME = "filename";
     public static final String NAME = "name";
     public static final String VIDEO_NAME_List = "video_name_list";
-
+    public static final String AABB = "aabb";
+    public static final String PICTURE_QUALITY = "picture_quality";
     //account<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -142,6 +143,7 @@ public class HttpRequest {
         request.put(USER_ID, Application.getInstance().getCurrentUserId());
         request.put(TRAIN_STEPS, trainSteps);
         request.put(VIDEO_NAME,videoName);
+        request.put(AABB,SettingUtil.getInt(SettingUtil.KEY_AABB,32));
         Map<String,File> fileMap = new HashMap<>();
         fileMap.put(FILE,videoFile);
         HttpManager.getInstance().post(request,fileMap ,URL_BASE + "/camera/file", requestCode, listener);
@@ -192,6 +194,7 @@ public class HttpRequest {
         request.put("origin", origin);
         request.put("translation", translation);
         request.put("rotation", rotationList);
+        request.put(PICTURE_QUALITY, SettingUtil.getInt(SettingUtil.KEY_PICTURE_QUALITY, 1));
 
         HttpManager.getInstance().post(request, URL_BASE + "/render/photo", true,requestCode, listener);
     }
@@ -202,6 +205,7 @@ public class HttpRequest {
         request.put(NAME, name);
         request.put(TRAIN_STEPS, trainSteps);
         request.put(USER_ID, Application.getInstance().getCurrentUserId());
+        request.put(AABB, SettingUtil.getInt(SettingUtil.KEY_AABB, 32));
 
         HttpManager.getInstance().post(request, URL_BASE + "/camera/setDroneVideo", true,requestCode, listener);
     }

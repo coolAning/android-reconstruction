@@ -42,6 +42,7 @@ import aning.reconstruction.util.HttpRequest;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.SettingUtil;
 
 
 /**activity示例
@@ -147,7 +148,23 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 
 	@Override
 	public void initData() {//必须在onCreate方法内调用
-		setVideo(videoUri);
+
+		runThread(TAG + "initData", new Runnable() {
+
+			@Override
+			public void run() {
+
+				runUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						setVideo(videoUri);
+						trainStepsET.setText(String.valueOf(SettingUtil.getInt(SettingUtil.KEY_TRAIN_STEPS, 1000)));
+					}
+				});
+			}
+		});
+
 	}
 
 

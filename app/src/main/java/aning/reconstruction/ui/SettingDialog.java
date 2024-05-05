@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import aning.reconstruction.R;
+import zuo.biao.library.util.SettingUtil;
 import zuo.biao.library.util.StringUtil;
 
 /**通用对话框类
@@ -78,6 +79,8 @@ public class SettingDialog extends Dialog implements View.OnClickListener {
 		btnNegative = findViewById(R.id.btnSettingDialogNegative);
 		tvName = findViewById(R.id.video_name_et);
 		tvTrainSteps = findViewById(R.id.train_steps_et);
+		tvTrainSteps.setText(String.valueOf(SettingUtil.getInt(SettingUtil.KEY_TRAIN_STEPS, 1000)));
+
 
 		tvTitle.setVisibility(StringUtil.isNotEmpty(title, true) ? View.VISIBLE : View.GONE);
 		tvTitle.setText("" + StringUtil.getCurrentString());

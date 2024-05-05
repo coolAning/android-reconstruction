@@ -3,9 +3,12 @@ package aning.reconstruction.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +20,7 @@ import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.util.Log;
 import zuo.biao.library.util.SettingUtil;
+import zuo.biao.library.util.StringUtil;
 
 /**模型设置界面Activity
  * @author Lemon
@@ -57,11 +61,18 @@ public class ModelSettingActivity extends BaseActivity {
 
 	//UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+	private Button changeButton;
+	private EditText trainStepET;
+	private EditText aabbET;
+	private EditText pictureQualityET;
 
+	private boolean isChange = false;
 	@Override
 	public void initView() {//必须调用
-
-
+		changeButton = findView(R.id.change);
+		trainStepET = findView(R.id.train_steps_et);
+		aabbET = findView(R.id.aabb);
+		pictureQualityET = findView(R.id.picture_quality_et);
 	}
 
 
@@ -92,8 +103,9 @@ public class ModelSettingActivity extends BaseActivity {
 
 			@Override
 			public void run() {
-
-
+				trainStepET.setText(StringUtil.get(SettingUtil.getInt(SettingUtil.KEY_TRAIN_STEPS, 1000)));
+				aabbET.setText(StringUtil.get(SettingUtil.getInt(SettingUtil.KEY_AABB, 32)));
+				pictureQualityET.setText(StringUtil.get(SettingUtil.getInt(SettingUtil.KEY_PICTURE_QUALITY, 1)));
 			}
 		});
 
@@ -115,7 +127,82 @@ public class ModelSettingActivity extends BaseActivity {
 
 	@Override
 	public void initEvent() {//必须调用
+		changeButton.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				if (isChange){
+					int[] values = new int[3];
+					values[0] = Integer.parseInt((trainStepET.getText().toString()));
+					values[1] = Integer.parseInt((aabbET.getText().toString()));
+					values[2] = Integer.parseInt((pictureQualityET.getText().toString()));
+					SettingUtil.putAllInt(values);
+					showShortToast("修改成功");
+					finish();
+				}
+			}
+		});
+
+
+		trainStepET.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				changeButton.setClickable(true);
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (StringUtil.isNotEmpty(s.toString(), true)){
+					changeButton.setClickable(true);
+					isChange = true;
+				}else {
+					trainStepET.setError("训练步数不能为空");
+					changeButton.setClickable(false);
+				}
+			}
+		});
+
+		aabbET.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				changeButton.setClickable(true);
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (StringUtil.isNotEmpty(s.toString(), true)){
+					changeButton.setClickable(true);
+					isChange = true;
+				}else {
+					aabbET.setError("AABB参数不能为空");
+					changeButton.setClickable(false);
+				}
+			}
+		});
+
+		pictureQualityET.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				changeButton.setClickable(true);
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (StringUtil.isNotEmpty(s.toString(), true)){
+					changeButton.setClickable(true);
+					isChange = true;
+				}else {
+					pictureQualityET.setError("图片质量不能为空");
+					changeButton.setClickable(false);
+				}
+			}
+		});
 
 	}
 

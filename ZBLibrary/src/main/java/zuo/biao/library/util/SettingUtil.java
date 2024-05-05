@@ -32,17 +32,25 @@ public final class SettingUtil {
 	/**建议改成你自己项目的路径*/
 	public static final String APP_SETTING = "SHARE_PREFS_" + "APP_SETTING";
 
+	public static final String MODEL_SETTING = "SHARE_PREFS_" + "MODEL_SETTING";
 	private SettingUtil() {/*不能实例化**/}
 
 
 	public static final String KEY_CACHE = "KEY_CACHE";//开启缓存
 	public static final String KEY_IS_ON_TEST_MODE = "KEY_IS_ON_TEST_MODE";//测试模式
 	public static final String KEY_IS_FIRST_START = "KEY_IS_FIRST_START";//第一次打开应用
-
+	public static final String KEY_TRAIN_STEPS = "KEY_TRAIN_STEPS";//默认训练步数
+	public static final String KEY_AABB = "KEY_AABB";//aabb缩放参数
+	public static final String KEY_PICTURE_QUALITY = "KEY_PICTURE_QUALITY";//图片质量
 	public static final String[] KEYS = {
 		KEY_CACHE,
 		KEY_IS_ON_TEST_MODE,
 		KEY_IS_FIRST_START,
+	};
+	public static final String[] MODEL_KEYS = {
+			KEY_TRAIN_STEPS,
+			KEY_AABB,
+			KEY_PICTURE_QUALITY,
 	};
 
 	public static boolean cache = true;//开启缓存
@@ -89,6 +97,7 @@ public final class SettingUtil {
 		return getKeyIndex(key) >= 0;
 	}
 
+
 	/**获取key在KEYS中的位置
 	 * @param key
 	 * @return
@@ -103,6 +112,7 @@ public final class SettingUtil {
 
 		return -1;
 	}
+
 
 	/**
 	 * @param key
@@ -170,6 +180,80 @@ public final class SettingUtil {
 				isFirstStart,
 		};
 	}
+
+	/**判断是否存在model key
+	 * @param key
+	 * @return
+	 */
+	public static boolean isContainModelKey(String key) {
+		return getModelKeyIndex(key) >= 0;
+	}
+
+	/**获取model key在KEYS中的位置
+	 * @param key
+	 * @return
+	 */
+	public static int getModelKeyIndex(String key) {
+		key = StringUtil.getTrimedString(key);
+		for (int i = 0; i < MODEL_KEYS.length; i++) {
+			if (key.equals(MODEL_KEYS[i])) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static int getInt(String key, int defaultValue){
+		if (isContainModelKey(key) == false) {
+			Log.e(TAG, "writeBoolean  isContainModelKey(key) == false >> return defaultValue;");
+			return defaultValue;
+		}
+
+		return context.getSharedPreferences(MODEL_SETTING, Context.MODE_PRIVATE).getInt(key, defaultValue);
+	}
+	/**
+	 * @param key
+	 * @param value
+	 */
+	public static void putInt(String key, int value){
+		int keyIndex = getModelKeyIndex(key);
+		if (keyIndex <= 0) {
+			Log.e(TAG, "writeBoolean  keyIndex <= 0 >> return;");
+			return;
+		}
+
+		context.getSharedPreferences(MODEL_SETTING, Context.MODE_PRIVATE)
+				.edit()
+				.remove(key)//防止因类型不同导致崩溃
+				.putInt(key, value)
+				.commit();
+
+	}
+
+
+	/**设置所有int
+	 * @param values
+	 */
+	public static void putAllInt(int[] values){
+		if (values == null || values.length != MODEL_KEYS.length) {
+			Log.e(TAG, "putAllInt  values == null || values.length != KEYS.length >> return;");
+			return;
+		}
+
+		Editor editor = context.getSharedPreferences(MODEL_SETTING, Context.MODE_PRIVATE).edit();
+		editor.clear();
+		for (int i = 0; i < values.length; i++) {
+			editor.putInt(MODEL_KEYS[i], values[i]);
+		}
+		editor.commit();
+	}
+
 
 	public static final int[] NO_DISTURB_START_TIME = {23, 0};
 	public static final int[] NO_DISTURB_END_TIME = {6, 0};
