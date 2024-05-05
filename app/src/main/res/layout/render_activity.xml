@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/activity_page" >
 
-    <RelativeLayout style="@style/topbar_bg" >
+    <RelativeLayout style="@style/topbar_bg"
+        android:background="@color/colorMain"
+        >
 
         <ImageButton style="@style/topbar_return_img" />
 

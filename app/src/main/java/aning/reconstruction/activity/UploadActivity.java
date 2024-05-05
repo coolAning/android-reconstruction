@@ -110,8 +110,8 @@ public class UploadActivity extends BaseActivity implements OnBottomDragListener
 	private VideoView videoView;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
+		this.setStatusBarColor(R.color.colorMain);
 		autoSetTitle();//自动设置标题为上个Activity传入的INTENT_TITLE
-
 		fileNameET = findView(R.id.video_name_et);
 		trainStepsET = findView(R.id.train_steps_et);
 		UploadButton = findView(R.id.upload_btn);

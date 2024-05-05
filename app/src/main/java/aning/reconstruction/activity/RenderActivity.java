@@ -98,6 +98,7 @@ public class RenderActivity extends BaseActivity implements OnBottomDragListener
 	private ImageButton ibDirectionD;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
+		this.setStatusBarColor(R.color.colorMain);
 		ivRender = findView(R.id.render_photo_iv);
 		//移动键四方位
 		ibMoveW = findView(R.id.w_ib);

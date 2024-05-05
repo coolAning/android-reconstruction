@@ -69,6 +69,7 @@ public class ModelSettingActivity extends BaseActivity {
 	private boolean isChange = false;
 	@Override
 	public void initView() {//必须调用
+		this.setStatusBarColor(R.color.colorMain);
 		changeButton = findView(R.id.change);
 		trainStepET = findView(R.id.train_steps_et);
 		aabbET = findView(R.id.aabb);

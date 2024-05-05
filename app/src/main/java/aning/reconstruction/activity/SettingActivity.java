@@ -58,6 +58,7 @@ public class SettingActivity extends BaseActivity implements OnBottomDragListene
 	private Button clearCacheButton;
 	@Override
 	public void initView() {//必须调用
+		this.setStatusBarColor(R.color.colorMain);
 		clearCacheButton = findView(R.id.clear_cache_button);
 		ivSettings = new ImageView[3];
 		ivSettings[0] = findView(R.id.ivSettingCache);

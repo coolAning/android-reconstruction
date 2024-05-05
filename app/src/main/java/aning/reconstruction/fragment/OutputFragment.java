@@ -261,11 +261,6 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 
 		}
 
-
-
-//			toActivity(RenderActivity.createIntent(context, userId, adapter.getItem(position).getValue()));
-//		}
-
 	}
 	private final int toBottomMenuWindowRequestCode = 1;
 	@Override

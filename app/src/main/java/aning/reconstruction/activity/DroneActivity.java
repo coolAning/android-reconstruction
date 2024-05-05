@@ -46,6 +46,7 @@ import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.SettingUtil;
 
 
 public class DroneActivity extends BaseActivity implements TextureView.SurfaceTextureListener, View.OnClickListener {
@@ -58,7 +59,7 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 	public static final String RESULT_CLICKED_ITEM = "RESULT_CLICKED_ITEM";
 
 	//后端rtmp地址url
-	private static final String baseLiveShowUrl = "rtmp://118.202.10.58:6666/live/";
+	private String baseLiveShowUrl = "";
 
 	private String liveShowUrl = "";
 	private String name = "";
@@ -93,6 +94,9 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 
 		intent = getIntent();
 		userId = intent.getLongExtra(INTENT_USER_ID, userId);
+		String ip = SettingUtil.getCurrentServerAddress().replaceAll("http://|https://", "").replaceAll(":[0-9]{1,5}", "");
+		Log.i(TAG, "ip: " + ip);
+		baseLiveShowUrl = "rtmp://" + ip + ":6666/live/";
 
 		//功能归类分区方法，必须调用<<<<<<<<<<
 		initView();
