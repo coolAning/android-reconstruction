@@ -17,19 +17,9 @@ package aning.reconstruction.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import aning.reconstruction.DEMO.DemoFragment;
 import aning.reconstruction.R;
 import aning.reconstruction.fragment.LoginFragment;
 import aning.reconstruction.fragment.RegisterFragment;
@@ -37,7 +27,6 @@ import aning.reconstruction.fragment.RetrievePasswordFragment;
 import aning.reconstruction.interfaces.OnDataPassListener;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.manager.SystemBarTintManager;
 
 
 /**

@@ -159,62 +159,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
 
 
-        <activity android:name="aning.reconstruction.DEMO.DemoThreadPoolActivity"></activity>
-        <activity
-            android:name="aning.reconstruction.activity.UserActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoMainActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoRecyclerActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoHttpListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoHttpRecyclerActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoFragmentActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoTabActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoSQLActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustUnspecified" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoTimeRefresherActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustUnspecified" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoBroadcastReceiverActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="aning.reconstruction.DEMO.DemoBottomWindow"
-            android:screenOrientation="portrait"
-            android:theme="@style/Window"
-            android:windowSoftInputMode="stateAlwaysHidden" /> <!-- Demo >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
         <!-- ZBLibrary <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
         <activity
             android:name="zuo.biao.library.ui.SelectPictureActivity"

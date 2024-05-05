@@ -28,10 +28,7 @@ import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.ui.AlertDialog;
 import zuo.biao.library.ui.AlertDialog.OnDialogButtonClickListener;
 
-/**设置fragment
- * @author Lemon
- * @use new SettingFragment(),详细使用见.DemoFragmentActivity(initData方法内)
- */
+
 public class SettingFragment extends BaseFragment implements OnClickListener, OnDialogButtonClickListener {
 //	private static final String TAG = "SettingFragment";
 

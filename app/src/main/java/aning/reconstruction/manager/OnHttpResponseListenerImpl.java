@@ -16,7 +16,6 @@ package aning.reconstruction.manager;
 
 import org.json.JSONObject;
 
-import aning.reconstruction.activity.UserActivity;
 import aning.reconstruction.interfaces.OnHttpResponseListener;
 import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;

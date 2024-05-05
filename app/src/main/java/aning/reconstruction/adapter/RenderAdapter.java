@@ -23,11 +23,6 @@ import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;
 
 
-/**通用网格Adapter(url, name)
- * *适用于gridView
- * @author Lemon
- * @use new GridAdapter(...); 具体参考.DemoAdapter
- */
 public class RenderAdapter extends BaseAdapter {
 	private static final String TAG = "GridAdapter";
 

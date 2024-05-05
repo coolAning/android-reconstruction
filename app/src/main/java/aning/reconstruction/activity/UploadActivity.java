@@ -45,11 +45,6 @@ import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.util.SettingUtil;
 
 
-/**activity示例
- * @author Lemon
- * @warn 复制到其它工程内使用时务必修改import R文件路径为所在应用包名
- * @use toActivity(DemoActivity.createIntent(...));
- */
 public class UploadActivity extends BaseActivity implements OnBottomDragListener {
 	private static final String TAG = "UploadActivity";
 
