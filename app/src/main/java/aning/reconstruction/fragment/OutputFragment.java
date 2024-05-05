@@ -254,9 +254,17 @@ public class OutputFragment extends BaseListFragment<Entry<String, String>, Grid
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (adapter.getCheckStatus()) {
 			adapter.setItemChecked(position, ! adapter.getItemChecked(position));
+		}else if(adapter.getItem(position).getKey().contains("occupancy")){
+			showShortToast("模型处理中，请耐心等待");
 		}else {
 			toActivity(RenderActivity.createIntent(context, userId, adapter.getItem(position).getValue()));
+
 		}
+
+
+
+//			toActivity(RenderActivity.createIntent(context, userId, adapter.getItem(position).getValue()));
+//		}
 
 	}
 	private final int toBottomMenuWindowRequestCode = 1;
