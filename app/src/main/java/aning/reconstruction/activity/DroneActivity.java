@@ -35,6 +35,8 @@ import aning.reconstruction.model.HTTPResponse;
 import aning.reconstruction.ui.SettingDialog;
 import aning.reconstruction.util.HttpRequest;
 import dji.common.error.DJIError;
+import dji.common.flightcontroller.virtualstick.RollPitchControlMode;
+import dji.common.flightcontroller.virtualstick.YawControlMode;
 import dji.common.product.Model;
 import dji.common.useraccount.UserAccountState;
 import dji.common.util.CommonCallbacks;
@@ -42,6 +44,8 @@ import dji.sdk.base.BaseProduct;
 import dji.sdk.camera.Camera;
 import dji.sdk.camera.VideoFeeder;
 import dji.sdk.codec.DJICodecManager;
+import dji.sdk.flightcontroller.FlightController;
+import dji.sdk.products.Aircraft;
 import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
 import zuo.biao.library.base.BaseActivity;
@@ -112,6 +116,8 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 	private Button settingBtn;
 	private ToggleButton recordBtn;
 	private TextView recordingTime;
+	private Button takeOffBtn;
+	private Button landBtn;
 	@Override
 	public void initView() {//必须在onCreate方法内调用
 		// init mVideoSurface
@@ -123,6 +129,9 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 		recordingTime.setVisibility(View.INVISIBLE);
 
 		recordBtn.setClickable(false);
+
+		takeOffBtn = (Button) findViewById(R.id.takeoff);
+		landBtn = (Button) findViewById(R.id.land);
 
 	}
 
@@ -223,6 +232,60 @@ public class DroneActivity extends BaseActivity implements TextureView.SurfaceTe
 				}
 			}
 		});
+
+		//无人机起飞
+		takeOffBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// 获取飞行控制器
+				FlightController flightController = ((Aircraft)DJISDKManager.getInstance().getProduct()).getFlightController();
+
+				// 起飞
+				flightController.startTakeoff(new CommonCallbacks.CompletionCallback() {
+					@Override
+					public void onResult(DJIError djiError) {
+						if (djiError == null) {
+							Log.d(TAG, "Takeoff success");
+						} else {
+							Log.d(TAG, "Takeoff failure: " + djiError.getDescription());
+						}
+					}
+				});
+
+				// 设置手柄控制模式
+				flightController.setRollPitchControlMode(RollPitchControlMode.ANGLE);
+				flightController.setYawControlMode(YawControlMode.ANGULAR_VELOCITY);
+
+				takeOffBtn.setVisibility(View.GONE);
+				landBtn.setVisibility(View.VISIBLE);
+			}
+		});
+
+
+		//无人机降落
+
+		landBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// 获取飞行控制器
+				FlightController flightController = ((Aircraft)DJISDKManager.getInstance().getProduct()).getFlightController();
+
+				// 降落
+				flightController.startLanding(new CommonCallbacks.CompletionCallback() {
+					@Override
+					public void onResult(DJIError djiError) {
+						if (djiError == null) {
+							Log.d(TAG, "Landing success");
+						} else {
+							Log.d(TAG, "Landing failure: " + djiError.getDescription());
+						}
+					}
+				});
+				landBtn.setVisibility(View.GONE);
+				takeOffBtn.setVisibility(View.VISIBLE);
+			}
+		});
+
 	}
 
 

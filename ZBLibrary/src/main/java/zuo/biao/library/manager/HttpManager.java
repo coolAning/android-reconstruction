@@ -392,7 +392,7 @@ public class HttpManager {
 		OkHttpClient.Builder builder = new OkHttpClient.Builder()
 				.connectTimeout(15, TimeUnit.SECONDS)
 				.writeTimeout(10, TimeUnit.SECONDS)
-				.readTimeout(10, TimeUnit.SECONDS)
+				.readTimeout(60, TimeUnit.SECONDS)
 				.cookieJar(new CookieJar() {
 
 					@Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/activity_page" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/activity_page">
 
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,7 +34,21 @@
                 android:textOff="@string/start_upload"
                 android:textOn="@string/stop_upload"
                 android:textSize="12sp"/>
-
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:id="@+id/takeoff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="起飞"
+                />
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:id="@+id/land"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="降落"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/parameter_setting_btn"
